@@ -77,7 +77,7 @@ void IO_Config()
 	GPIO_Bit_Rst(GPIOB, Pin_13);
 	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);	// PB14 - DMGN_SWITCH включение обмотки размагничивания
 	GPIO_Bit_Rst(GPIOB, Pin_14);
-	GPIO_Config (GPIOB, Pin_15, Output, OpenDrain, HighSpeed, Pull_Up);	// PB15 - BC_CONTROL управление контактором
+	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, Pull_Up);	// PB15 - BC_CONTROL управление контактором
 	GPIO_Bit_Set(GPIOB, Pin_15);
 
 	// Альтернативные функции портов
