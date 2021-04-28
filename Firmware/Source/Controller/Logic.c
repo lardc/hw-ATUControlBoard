@@ -217,11 +217,15 @@ void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent)
 			LOGIC_OutputPulse[CounterPreCurrent + i] = PulseValue;
 	}
 
-	// Копирование массива в EP
+	// Проверка на переполнение и копирование массива в EP
 	LOGIC_DataCounter = CounterPreCurrent + CounterCurrent + (uint16_t)(DAC_MAIN_PULSE_STOP / DAC_TIME_STEP);
 	//
-	for (i = 0; i < LOGIC_DataCounter; ++i)
+	for(i = 0; i < LOGIC_DataCounter; ++i)
+	{
+		if(LOGIC_OutputPulse[i] > DAC_RESOLUTION)
+			LOGIC_OutputPulse[i] = DAC_RESOLUTION;
 		CONTROL_Values_Setpoint[i] = LOGIC_OutputPulse[i];
+	}
 	CONTROL_Values_SetCounter = LOGIC_DataCounter;
 }
 //-------------------------------------------
