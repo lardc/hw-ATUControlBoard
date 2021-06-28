@@ -26,6 +26,7 @@ typedef struct __ProcessResult
 	float Prsm;
 	float Max_dVdt;
 	float Vmax;
+	float Rstd;
 	bool LoadR;
 } ProcessResult, *pProcessResult;
 

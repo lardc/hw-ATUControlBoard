@@ -18,7 +18,7 @@
 #define ENABLE_LOCKING					FALSE
 // -----------------------------------------------
 #define EP_WRITE_COUNT					0							// Количество массивов для записи
-#define EP_COUNT						7							// Количество массивов для чтения
+#define EP_COUNT						8							// Количество массивов для чтения
 #define VALUES_x_SIZE					PULSE_ARR_MAX_LENGTH		// Размер выходных массивов
 #define ENABLE_LOCKING					FALSE
 // -----------------------------------------------

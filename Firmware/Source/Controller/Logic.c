@@ -310,6 +310,7 @@ ProcessResult LOGIC_ProcessOutputData()
 	ret.Prsm = Prsm;
 	ret.Max_dVdt = Max_dVdt;
 	ret.Vmax = Vmax;
+	ret.Rstd = ResAvgSq;
 	ret.LoadR = (ResAvgSq < LOAD_R_STDEV) ? true : false;
 
 	return ret;
