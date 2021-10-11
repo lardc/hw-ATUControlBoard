@@ -34,7 +34,7 @@ void LL_Sync(bool State)
 // Contactor control
 void LL_Contactor(bool State)
 {
-	State ? GPIO_Bit_Rst(GPIOB, Pin_15) : GPIO_Bit_Set(GPIOB, Pin_15);
+	State ? GPIO_Bit_Set(GPIOB, Pin_15) : GPIO_Bit_Rst(GPIOB, Pin_15);
 }
 //------------------------------------------------------------------------------
 
