@@ -1,4 +1,4 @@
-// Include
+п»ї// Include
 //
 #include "Global.h"
 #include "Controller.h"
@@ -52,35 +52,35 @@ void SysClk_Config()
 
 void IO_Config()
 {
-	// Включение тактирования портов
+	// Р’РєР»СЋС‡РµРЅРёРµ С‚Р°РєС‚РёСЂРѕРІР°РЅРёСЏ РїРѕСЂС‚РѕРІ
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 
-	// Выходы
-	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);	// PA8 - SYNC линия внешней синхронизации
+	// Р’С‹С…РѕРґС‹
+	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);	// PA8 - SYNC Р»РёРЅРёСЏ РІРЅРµС€РЅРµР№ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё
 	GPIO_Bit_Rst(GPIOA, Pin_8);
-	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);	// PA6 - PS_STOP линия принудительной остановки зарядных устройств
+	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);	// PA6 - PS_STOP Р»РёРЅРёСЏ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕР№ РѕСЃС‚Р°РЅРѕРІРєРё Р·Р°СЂСЏРґРЅС‹С… СѓСЃС‚СЂРѕР№СЃС‚РІ
 	GPIO_Bit_Rst(GPIOA, Pin_6);
-	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);	// PB0 - ACH1_RST сброс уставки аналогового канала 1
+	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);	// PB0 - ACH1_RST СЃР±СЂРѕСЃ СѓСЃС‚Р°РІРєРё Р°РЅР°Р»РѕРіРѕРІРѕРіРѕ РєР°РЅР°Р»Р° 1
 	GPIO_Bit_Set(GPIOB, Pin_0);
-	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);	// PB1 - ACH2_RST сброс уставки аналогового канала 2
+	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);	// PB1 - ACH2_RST СЃР±СЂРѕСЃ СѓСЃС‚Р°РІРєРё Р°РЅР°Р»РѕРіРѕРІРѕРіРѕ РєР°РЅР°Р»Р° 2
 	GPIO_Bit_Set(GPIOB, Pin_1);
-	GPIO_Config (GPIOB, Pin_2, Output, PushPull, HighSpeed, NoPull);	// PB2 - PS_ENABLE включение зарядных устройств
+	GPIO_Config (GPIOB, Pin_2, Output, PushPull, HighSpeed, NoPull);	// PB2 - PS_ENABLE РІРєР»СЋС‡РµРЅРёРµ Р·Р°СЂСЏРґРЅС‹С… СѓСЃС‚СЂРѕР№СЃС‚РІ
 	GPIO_Bit_Rst(GPIOB, Pin_2);
-	GPIO_Config (GPIOB, Pin_4, Output, PushPull, HighSpeed, NoPull);	// PB4 - DSCHRG_SWITCH включение разрядных реле
+	GPIO_Config (GPIOB, Pin_4, Output, PushPull, HighSpeed, NoPull);	// PB4 - DSCHRG_SWITCH РІРєР»СЋС‡РµРЅРёРµ СЂР°Р·СЂСЏРґРЅС‹С… СЂРµР»Рµ
 	GPIO_Bit_Rst(GPIOB, Pin_4);
-	GPIO_Config (GPIOB, Pin_10, Output, OpenDrain, HighSpeed, Pull_Up);	// PB10 - AMP_LOCK блокирование силовых выходов аналоговых ОУ
+	GPIO_Config (GPIOB, Pin_10, Output, OpenDrain, HighSpeed, Pull_Up);	// PB10 - AMP_LOCK Р±Р»РѕРєРёСЂРѕРІР°РЅРёРµ СЃРёР»РѕРІС‹С… РІС‹С…РѕРґРѕРІ Р°РЅР°Р»РѕРіРѕРІС‹С… РћРЈ
 	GPIO_Bit_Set(GPIOB, Pin_10);
-	GPIO_Config (GPIOB, Pin_12, Output, PushPull, HighSpeed, NoPull);	// PB12 - LED светодиод на ПП
+	GPIO_Config (GPIOB, Pin_12, Output, PushPull, HighSpeed, NoPull);	// PB12 - LED СЃРІРµС‚РѕРґРёРѕРґ РЅР° РџРџ
 	GPIO_Bit_Rst(GPIOB, Pin_12);
-	GPIO_Config (GPIOB, Pin_13, Output, PushPull, HighSpeed, NoPull);	// PB13 - IND внешняя индикация
+	GPIO_Config (GPIOB, Pin_13, Output, PushPull, HighSpeed, NoPull);	// PB13 - IND РІРЅРµС€РЅСЏСЏ РёРЅРґРёРєР°С†РёСЏ
 	GPIO_Bit_Rst(GPIOB, Pin_13);
-	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);	// PB14 - DMGN_SWITCH включение обмотки размагничивания
+	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);	// PB14 - DMGN_SWITCH РІРєР»СЋС‡РµРЅРёРµ РѕР±РјРѕС‚РєРё СЂР°Р·РјР°РіРЅРёС‡РёРІР°РЅРёСЏ
 	GPIO_Bit_Rst(GPIOB, Pin_14);
-	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, Pull_Up);	// PB15 - BC_CONTROL управление контактором
+	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, Pull_Up);	// PB15 - BC_CONTROL СѓРїСЂР°РІР»РµРЅРёРµ РєРѕРЅС‚Р°РєС‚РѕСЂРѕРј
 	GPIO_Bit_Set(GPIOB, Pin_15);
 
-	// Альтернативные функции портов
+	// РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ С„СѓРЅРєС†РёРё РїРѕСЂС‚РѕРІ
 	GPIO_Config(GPIOA, Pin_9, AltFn, PushPull, HighSpeed, NoPull);		// PA9(USART1 TX)
 	GPIO_AltFn(GPIOA, Pin_9, AltFn_7);
 
@@ -100,7 +100,7 @@ void CAN_Config()
 	RCC_CAN_Clk_EN(CAN_1_ClkEN);
 	NCAN_Init(SYSCLK, CAN_BAUDRATE, FALSE);
 	NCAN_FIFOInterrupt(TRUE);
-	NCAN_FilterInit(0, 0, 0);		// Фильтр 0 пропускает все сообщения
+	NCAN_FilterInit(0, 0, 0);		// Р¤РёР»СЊС‚СЂ 0 РїСЂРѕРїСѓСЃРєР°РµС‚ РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ
 }
 //--------------------------------------------
 

@@ -1,4 +1,4 @@
-// Header
+п»ї// Header
 //
 #include "Logic.h"
 
@@ -45,10 +45,10 @@ int LOGIC_SortCondition(const void *A, const void *B);
 
 // Functions
 //
-// Сброс аппаратных линий в состояния по умолчанию
+// РЎР±СЂРѕСЃ Р°РїРїР°СЂР°С‚РЅС‹С… Р»РёРЅРёР№ РІ СЃРѕСЃС‚РѕСЏРЅРёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 void LOGIC_ResetHWToDefaults(bool StopPowerSupply)
 {
-	// Импульс не рвётся
+	// РРјРїСѓР»СЊСЃ РЅРµ СЂРІС‘С‚СЃСЏ
 	while (!LOGIC_IsPulseFinished());
 
 	LL_ExternalLED(FALSE);
@@ -63,7 +63,7 @@ void LOGIC_ResetHWToDefaults(bool StopPowerSupply)
 		LL_Discharge(TRUE);
 	}
 
-	// Переключение АЦП и ЦАП в базовый режим
+	// РџРµСЂРµРєР»СЋС‡РµРЅРёРµ РђР¦Рџ Рё Р¦РђРџ РІ Р±Р°Р·РѕРІС‹Р№ СЂРµР¶РёРј
 	DAC_SwitchToBase();
 	DAC_SetValueCh1(DAC1, 0);
 	//
@@ -71,7 +71,7 @@ void LOGIC_ResetHWToDefaults(bool StopPowerSupply)
 }
 //-------------------------------------------
 
-// Включение заряда батареи
+// Р’РєР»СЋС‡РµРЅРёРµ Р·Р°СЂСЏРґР° Р±Р°С‚Р°СЂРµРё
 void LOGIC_StartBatteryCharge()
 {
 	LL_Discharge(FALSE);
@@ -81,7 +81,7 @@ void LOGIC_StartBatteryCharge()
 }
 //-------------------------------------------
 
-// Подготовка к формированию импульса
+// РџРѕРґРіРѕС‚РѕРІРєР° Рє С„РѕСЂРјРёСЂРѕРІР°РЅРёСЋ РёРјРїСѓР»СЊСЃР°
 void LOGIC_PrepareForPulse(float PrePulseCurrent, float PulseCurrent)
 {
 	LOGIC_ClearDataArrays();
@@ -93,27 +93,27 @@ void LOGIC_PrepareForPulse(float PrePulseCurrent, float PulseCurrent)
 }
 //-------------------------------------------
 
-// Активация перед непосредственным запуском формирования
+// РђРєС‚РёРІР°С†РёСЏ РїРµСЂРµРґ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅС‹Рј Р·Р°РїСѓСЃРєРѕРј С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ
 void LOGIC_StartPulse()
 {
-	// Сохранение настраиваемых временных параметров
+	// РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂР°РёРІР°РµРјС‹С… РІСЂРµРјРµРЅРЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
 	TimeOpAmpStabilize = DataTable[REG_OP_AMP_STAB_TIME];
 	TimePreCurrentPlate = DataTable[REG_SET_PRE_PULSE_TIME];
 	TimeSyncShift = DataTable[REG_SYNC_SHIFT];
 	TimePulseWidth = (float)DataTable[REG_DAC_PULSE_WIDTH];
 
-	// Остановка зарядных устройств
+	// РћСЃС‚Р°РЅРѕРІРєР° Р·Р°СЂСЏРґРЅС‹С… СѓСЃС‚СЂРѕР№СЃС‚РІ
 	LL_PowerSupplyStop(TRUE);
 
-	// Вывод ОУ в рабочую зону
+	// Р’С‹РІРѕРґ РћРЈ РІ СЂР°Р±РѕС‡СѓСЋ Р·РѕРЅСѓ
 	DAC_SetValueCh1(DAC1, DataTable[REG_DAC_BASE_OFFSET]);
 	DAC_ForceSWTrigCh1(DAC1);
 
-	// Подготовка АЦП и ЦАП для работы по таймеру
+	// РџРѕРґРіРѕС‚РѕРІРєР° РђР¦Рџ Рё Р¦РђРџ РґР»СЏ СЂР°Р±РѕС‚С‹ РїРѕ С‚Р°Р№РјРµСЂСѓ
 	DAC_SwitchToHighSpeed();
 	ADC_SwitchToHighSpeed();
 
-	// Обновление счётчиков данных DMA
+	// РћР±РЅРѕРІР»РµРЅРёРµ СЃС‡С‘С‚С‡РёРєРѕРІ РґР°РЅРЅС‹С… DMA
 	DMA_ChannelReload(DMA_DAC_CHANNEL, LOGIC_DataCounter);
 	DMA_ChannelReload(DMA_ADC_DUT_V_CHANNEL, LOGIC_DataCounter);
 	DMA_ChannelReload(DMA_ADC_DUT_I_CHANNEL, LOGIC_DataCounter);
@@ -122,13 +122,13 @@ void LOGIC_StartPulse()
 	DMA_ChannelEnable(DMA_ADC_DUT_V_CHANNEL, true);
 	DMA_ChannelEnable(DMA_ADC_DUT_I_CHANNEL, true);
 
-	// Разрешение срабатывания АЦП
+	// Р Р°Р·СЂРµС€РµРЅРёРµ СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЏ РђР¦Рџ
 	ADC_SamplingStart(ADC1);
 
-	// Настройка таймера разблокировки аналоговой части
+	// РќР°СЃС‚СЂРѕР№РєР° С‚Р°Р№РјРµСЂР° СЂР°Р·Р±Р»РѕРєРёСЂРѕРІРєРё Р°РЅР°Р»РѕРіРѕРІРѕР№ С‡Р°СЃС‚Рё
 	TIM_Config(TIM2, SYSCLK, ANALOG_OPTO_UNLOCK);
 
-	// Деактивация аналоговой части
+	// Р”РµР°РєС‚РёРІР°С†РёСЏ Р°РЅР°Р»РѕРіРѕРІРѕР№ С‡Р°СЃС‚Рё
 	HS_State = HSS_AnalogUnlockOpto;
 	LL_AmpLock(FALSE);
 	TIM_Start(TIM2);
@@ -137,16 +137,16 @@ void LOGIC_StartPulse()
 
 void LOGIC_PulseFinished()
 {
-	// Деактивация аналоговой части
+	// Р”РµР°РєС‚РёРІР°С†РёСЏ Р°РЅР°Р»РѕРіРѕРІРѕР№ С‡Р°СЃС‚Рё
 	LL_MuteChannel1(TRUE);
 	LL_MuteChannel2(TRUE);
 
-	// Примерные задержки
+	// РџСЂРёРјРµСЂРЅС‹Рµ Р·Р°РґРµСЂР¶РєРё
 	DELAY_US(500);
 	LL_AmpLock(TRUE);
 	DELAY_US(200);
 
-	// Переключение АЦП и ЦАП в базовый режим
+	// РџРµСЂРµРєР»СЋС‡РµРЅРёРµ РђР¦Рџ Рё Р¦РђРџ РІ Р±Р°Р·РѕРІС‹Р№ СЂРµР¶РёРј
 	DAC_SwitchToBase();
 	DAC_SetValueCh1(DAC1, 0);
 	//
@@ -178,46 +178,46 @@ void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent)
 {
 	uint16_t i;
 
-	// Общее смещение сигнала ЦАП
+	// РћР±С‰РµРµ СЃРјРµС‰РµРЅРёРµ СЃРёРіРЅР°Р»Р° Р¦РђРџ
 	float DACBaseOffset = (float)DataTable[REG_DAC_BASE_OFFSET];
 
-	// Усиление начала импульса предварительного тока
+	// РЈСЃРёР»РµРЅРёРµ РЅР°С‡Р°Р»Р° РёРјРїСѓР»СЊСЃР° РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРіРѕ С‚РѕРєР°
 	float DACPreCurrentGain = (float)DataTable[REG_DAC_PRE_CURR_GAIN] / 10;
 
-	// Ширина импульса по уровню 50%
+	// РЁРёСЂРёРЅР° РёРјРїСѓР»СЊСЃР° РїРѕ СѓСЂРѕРІРЅСЋ 50%
 	float PulseWidth = (float)DataTable[REG_DAC_PULSE_WIDTH];
 
-	// Рассчёт длительности в тиках для предварительного и основного импульса
+	// Р Р°СЃСЃС‡С‘С‚ РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё РІ С‚РёРєР°С… РґР»СЏ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРіРѕ Рё РѕСЃРЅРѕРІРЅРѕРіРѕ РёРјРїСѓР»СЊСЃР°
 	CounterPreCurrent = (uint16_t)((float)DataTable[REG_SET_PRE_PULSE_TIME] / DAC_TIME_STEP);
 	uint16_t CounterCurrent = (uint16_t)(PulseWidth / DAC_TIME_STEP);
 
-	// Рассчёт значений ЦАП для предварительного импульса и амплитуды основного
+	// Р Р°СЃСЃС‡С‘С‚ Р·РЅР°С‡РµРЅРёР№ Р¦РђРџ РґР»СЏ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРіРѕ РёРјРїСѓР»СЊСЃР° Рё Р°РјРїР»РёС‚СѓРґС‹ РѕСЃРЅРѕРІРЅРѕРіРѕ
 	float CurrentToDAC_K = (float)DataTable[REG_I_TO_DAC_K] / 1000;
 	float CurrentToDAC_Offset = (float)((int16_t)DataTable[REG_I_TO_DAC_OFFSET]);
 	//
 	float ValDAC_PreCurrent = PrePulseCurrent * CurrentToDAC_K + CurrentToDAC_Offset;
 	float ValDAC_Current = PulseCurrent * CurrentToDAC_K + CurrentToDAC_Offset;
 
-	// Значения должны быть положительными
+	// Р—РЅР°С‡РµРЅРёСЏ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹РјРё
 	ValDAC_PreCurrent = (ValDAC_PreCurrent > 0) ? ValDAC_PreCurrent : 0;
 	ValDAC_Current = (ValDAC_Current > 0) ? ValDAC_Current : 0;
 
-	// Заполнение массива предварительного импульса с форсированием
+	// Р—Р°РїРѕР»РЅРµРЅРёРµ РјР°СЃСЃРёРІР° РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕРіРѕ РёРјРїСѓР»СЊСЃР° СЃ С„РѕСЂСЃРёСЂРѕРІР°РЅРёРµРј
 	uint16_t PreCurrentCounterTop = CounterPreCurrent + CounterCurrent / 2;
 	for (i = 0; i < PreCurrentCounterTop; ++i)
 		LOGIC_OutputPulse[i] = (uint16_t)(ValDAC_PreCurrent * (1 + DACPreCurrentGain * (PreCurrentCounterTop - i) / PreCurrentCounterTop) + DACBaseOffset);
 
-	// Заполнение основным импульсом
+	// Р—Р°РїРѕР»РЅРµРЅРёРµ РѕСЃРЅРѕРІРЅС‹Рј РёРјРїСѓР»СЊСЃРѕРј
 	for (i = 0; i < CounterCurrent; ++i)
 	{
 		uint16_t PulseValue = (uint16_t)(ValDAC_Current * sin(PI_VALUE * i * DAC_TIME_STEP / PulseWidth) + DACBaseOffset);
 
-		// Условие плавного сопряжения импульсов
+		// РЈСЃР»РѕРІРёРµ РїР»Р°РІРЅРѕРіРѕ СЃРѕРїСЂСЏР¶РµРЅРёСЏ РёРјРїСѓР»СЊСЃРѕРІ
 		if (PulseValue > LOGIC_OutputPulse[CounterPreCurrent + i])
 			LOGIC_OutputPulse[CounterPreCurrent + i] = PulseValue;
 	}
 
-	// Проверка на переполнение и копирование массива в EP
+	// РџСЂРѕРІРµСЂРєР° РЅР° РїРµСЂРµРїРѕР»РЅРµРЅРёРµ Рё РєРѕРїРёСЂРѕРІР°РЅРёРµ РјР°СЃСЃРёРІР° РІ EP
 	LOGIC_DataCounter = CounterPreCurrent + CounterCurrent + (uint16_t)(DAC_MAIN_PULSE_STOP / DAC_TIME_STEP);
 	//
 	for(i = 0; i < LOGIC_DataCounter; ++i)
@@ -237,11 +237,11 @@ ProcessResult LOGIC_ProcessOutputData()
 	float Max_dVdt = 0, Vmax = 0;
 	float Vbr = 0, Vrsm = 0, Irsm = 0, Prsm = 0;
 
-	// Пересчёт значений АЦП в ток и напряжение
+	// РџРµСЂРµСЃС‡С‘С‚ Р·РЅР°С‡РµРЅРёР№ РђР¦Рџ РІ С‚РѕРє Рё РЅР°РїСЂСЏР¶РµРЅРёРµ
 	MEASURE_ConvertVoltageArr(LOGIC_DUTVoltageRaw, (float *)LOGIC_DataArrays, LOGIC_DataCounter);
 	MEASURE_ConvertCurrentArr(LOGIC_DUTCurrentRaw, (float *)LOGIC_DataArrays, LOGIC_DataCounter);
 
-	// Выгрузка результата в EP
+	// Р’С‹РіСЂСѓР·РєР° СЂРµР·СѓР»СЊС‚Р°С‚Р° РІ EP
 	for (i = 0; i < LOGIC_DataCounter; ++i)
 	{
 		CONTROL_Values_DUTVoltage[i] = (uint16_t)LOGIC_DataArrays[i].Voltage;
@@ -249,22 +249,22 @@ ProcessResult LOGIC_ProcessOutputData()
 	}
 	CONTROL_Values_ADCCounter = LOGIC_DataCounter;
 
-	// Вспомогательные вычисления
+	// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РІС‹С‡РёСЃР»РµРЅРёСЏ
 	uint16_t ResAvgCounter = 0;
 	for (i = 0; i < LOGIC_DataCounter; ++i)
 	{
-		// Среднее значение сопротивления (нули отбрасываются)
+		// РЎСЂРµРґРЅРµРµ Р·РЅР°С‡РµРЅРёРµ СЃРѕРїСЂРѕС‚РёРІР»РµРЅРёСЏ (РЅСѓР»Рё РѕС‚Р±СЂР°СЃС‹РІР°СЋС‚СЃСЏ)
 		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
 		{
 			ResAvg += LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current;
 			++ResAvgCounter;
 		}
 
-		// Максимальное напряжение
+		// РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
 		if (LOGIC_DataArrays[i].Voltage > Vmax)
 			Vmax = LOGIC_DataArrays[i].Voltage;
 
-		// Максимальная скорость нарастания напряжения
+		// РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ РЅР°СЂР°СЃС‚Р°РЅРёСЏ РЅР°РїСЂСЏР¶РµРЅРёСЏ
 		if (i < (LOGIC_DataCounter - 1))
 		{
 			float tmp = fabs(LOGIC_DataArrays[i].Voltage - LOGIC_DataArrays[i + 1].Voltage);
@@ -274,25 +274,25 @@ ProcessResult LOGIC_ProcessOutputData()
 	}
 	ResAvg /= ResAvgCounter;
 
-	// Расчёт среднеквадратичного отклонения величины сопротивления
+	// Р Р°СЃС‡С‘С‚ СЃСЂРµРґРЅРµРєРІР°РґСЂР°С‚РёС‡РЅРѕРіРѕ РѕС‚РєР»РѕРЅРµРЅРёСЏ РІРµР»РёС‡РёРЅС‹ СЃРѕРїСЂРѕС‚РёРІР»РµРЅРёСЏ
 	for (i = 0; i < LOGIC_DataCounter; ++i)
 	{
-		// Нули отбрасываются
+		// РќСѓР»Рё РѕС‚Р±СЂР°СЃС‹РІР°СЋС‚СЃСЏ
 		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
 			ResAvgSq += pow(LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current - ResAvg, 2);
 	}
 	ResAvgSq = sqrt(ResAvgSq / ResAvgCounter);
 
-	// Получение напряжения лавинообразования
+	// РџРѕР»СѓС‡РµРЅРёРµ РЅР°РїСЂСЏР¶РµРЅРёСЏ Р»Р°РІРёРЅРѕРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
 	uint16_t TimeSyncShiftCounter = (uint16_t)((float)TimeSyncShift / DAC_TIME_STEP);
 	for (i = (CounterPreCurrent + TimeSyncShiftCounter - MEASURE_AVG); i < (CounterPreCurrent + TimeSyncShiftCounter); ++i)
 		Vbr += LOGIC_DataArrays[i].Voltage;
 	Vbr /= MEASURE_AVG;
 
-	// Сортировка результатов измерения по величине тока
+	// РЎРѕСЂС‚РёСЂРѕРІРєР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РёР·РјРµСЂРµРЅРёСЏ РїРѕ РІРµР»РёС‡РёРЅРµ С‚РѕРєР°
 	qsort((void *)LOGIC_DataArrays, LOGIC_DataCounter, sizeof(SampleData), &LOGIC_SortCondition);
 
-	// Получение пиковых значений
+	// РџРѕР»СѓС‡РµРЅРёРµ РїРёРєРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
 	for (i = (LOGIC_DataCounter - MEASURE_AVG); i < LOGIC_DataCounter; ++i)
 	{
 		Vrsm += LOGIC_DataArrays[i].Voltage;
@@ -302,7 +302,7 @@ ProcessResult LOGIC_ProcessOutputData()
 	Irsm /= MEASURE_AVG;
 	Prsm = Vrsm * Irsm / 1000;
 
-	// Возврат результата
+	// Р’РѕР·РІСЂР°С‚ СЂРµР·СѓР»СЊС‚Р°С‚Р°
 	ProcessResult ret;
 	ret.Vbr  = Vbr;
 	ret.Vrsm = Vrsm;
@@ -325,7 +325,7 @@ int LOGIC_SortCondition(const void *A, const void *B)
 
 void LOGIC_DiagPulseDAC()
 {
-	// Выполнение коммутации
+	// Р’С‹РїРѕР»РЅРµРЅРёРµ РєРѕРјРјСѓС‚Р°С†РёРё
 	LL_ExternalLED(TRUE);
 	LL_Contactor(TRUE);
 	LL_Demagnitization(TRUE);
@@ -333,15 +333,15 @@ void LOGIC_DiagPulseDAC()
 	LL_Demagnitization(FALSE);
 	Delay_mS(10);
 
-	// Запуск формирования
+	// Р—Р°РїСѓСЃРє С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ
 	LL_Sync(TRUE);
 	LL_PowerSupplyStop(TRUE);
 
-	// Формирование выхода ЦАП
+	// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ РІС‹С…РѕРґР° Р¦РђРџ
 	DAC_SetValueCh1(DAC1, DataTable[REG_DIAG_DAC_PULSE]);
 	DAC_ForceSWTrigCh1(DAC1);
 
-	// Отключение блокировки аналогового выхода
+	// РћС‚РєР»СЋС‡РµРЅРёРµ Р±Р»РѕРєРёСЂРѕРІРєРё Р°РЅР°Р»РѕРіРѕРІРѕРіРѕ РІС‹С…РѕРґР°
 	LL_MuteChannel1(FALSE);
 	LL_MuteChannel2(FALSE);
 	LL_AmpLock(FALSE);
@@ -354,7 +354,7 @@ void LOGIC_DiagPulseDAC()
 
 	LL_Sync(FALSE);
 
-	// Отключение коммутации
+	// РћС‚РєР»СЋС‡РµРЅРёРµ РєРѕРјРјСѓС‚Р°С†РёРё
 	LL_PowerSupplyStop(FALSE);
 	LL_ExternalLED(FALSE);
 	LL_Contactor(FALSE);

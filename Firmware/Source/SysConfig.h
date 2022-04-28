@@ -1,4 +1,4 @@
-#ifndef __SYSCONFIG_H
+п»ї#ifndef __SYSCONFIG_H
 #define __SYSCONFIG_H
 
 #include "stdinc.h"
@@ -10,31 +10,31 @@
 //-----------------------------------------------
 
 // System clock
-#define SYSCLK							70000000	// Тактовая частота системной шины процессора
-#define QUARTZ_FREQUENCY				20000000	// Частота кварца
+#define SYSCLK							70000000	// РўР°РєС‚РѕРІР°СЏ С‡Р°СЃС‚РѕС‚Р° СЃРёСЃС‚РµРјРЅРѕР№ С€РёРЅС‹ РїСЂРѕС†РµСЃСЃРѕСЂР°
+#define QUARTZ_FREQUENCY				20000000	// Р§Р°СЃС‚РѕС‚Р° РєРІР°СЂС†Р°
 // ----------------------------------------------
 
 // USART
-#define USART_BAUDRATE					115200		// Скорость USART
-#define USART_FIFOlen					32			// Длина FIFO USART
+#define USART_BAUDRATE					115200		// РЎРєРѕСЂРѕСЃС‚СЊ USART
+#define USART_FIFOlen					32			// Р”Р»РёРЅР° FIFO USART
 // ----------------------------------------------
 
 // Timers
-#define TIMER6_uS                		0.5f		// Таймер тактирования ЦАП и АЦП
-#define TIMER3_uS                  		1000		// Таймер общего назначения
+#define TIMER6_uS                		0.5f		// РўР°Р№РјРµСЂ С‚Р°РєС‚РёСЂРѕРІР°РЅРёСЏ Р¦РђРџ Рё РђР¦Рџ
+#define TIMER3_uS                  		1000		// РўР°Р№РјРµСЂ РѕР±С‰РµРіРѕ РЅР°Р·РЅР°С‡РµРЅРёСЏ
 // ----------------------------------------------
 
 // CAN
-#define CAN_BAUDRATE					1000000		// Битрейт CAN
+#define CAN_BAUDRATE					1000000		// Р‘РёС‚СЂРµР№С‚ CAN
 // ----------------------------------------------
 
 // High-speed sampling
-#define DMA_DAC_CHANNEL					DMA1_Channel3	// Канал DMA для ЦАП
-#define DMA_ADC_DUT_V_CHANNEL			DMA1_Channel1	// Канал DMA для АЦП напряжения
-#define DMA_ADC_DUT_I_CHANNEL			DMA2_Channel1	// Канал DMA для АЦП тока
+#define DMA_DAC_CHANNEL					DMA1_Channel3	// РљР°РЅР°Р» DMA РґР»СЏ Р¦РђРџ
+#define DMA_ADC_DUT_V_CHANNEL			DMA1_Channel1	// РљР°РЅР°Р» DMA РґР»СЏ РђР¦Рџ РЅР°РїСЂСЏР¶РµРЅРёСЏ
+#define DMA_ADC_DUT_I_CHANNEL			DMA2_Channel1	// РљР°РЅР°Р» DMA РґР»СЏ РђР¦Рџ С‚РѕРєР°
 //
-#define ADC1_VOLTAGE_CHANNEL			1				// АЦП1 номер канала напряжения
-#define ADC2_CURRENT_CHANNEL			4				// АЦП2 номер канала тока
+#define ADC1_VOLTAGE_CHANNEL			1				// РђР¦Рџ1 РЅРѕРјРµСЂ РєР°РЅР°Р»Р° РЅР°РїСЂСЏР¶РµРЅРёСЏ
+#define ADC2_CURRENT_CHANNEL			4				// РђР¦Рџ2 РЅРѕРјРµСЂ РєР°РЅР°Р»Р° С‚РѕРєР°
 // ----------------------------------------------
 
 #endif // __SYSCONFIG_H

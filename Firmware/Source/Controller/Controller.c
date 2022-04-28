@@ -1,5 +1,5 @@
-//-----------------------------------------------
-// Основная логика
+п»ї//-----------------------------------------------
+// РћСЃРЅРѕРІРЅР°СЏ Р»РѕРіРёРєР°
 //-----------------------------------------------
 
 // Header
@@ -43,7 +43,7 @@ volatile Int16U CONTROL_Values_DiagEPCounter = 0;
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_TimeCounterDelay = 0;
 //
-// Параметры выхода на мощность
+// РџР°СЂР°РјРµС‚СЂС‹ РІС‹С…РѕРґР° РЅР° РјРѕС‰РЅРѕСЃС‚СЊ
 static Int16U CONTROL_PulsesRemain = 0;
 static Boolean CONTROL_PowerRegulator = FALSE;
 static float PowerTarget = 0, PowerRegulatorErrKi = 0;
@@ -64,7 +64,7 @@ uint16_t CONTROL_HandleWarningCondition(ProcessResult Result);
 //
 void CONTROL_Init()
 {
-	// Переменные для конфигурации EndPoint
+	// РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё EndPoint
 	Int16U EPIndexes[EP_COUNT] = { EP_DUT_V,  EP_DUT_I, EP_SETPOINT,
 								   EP_DIAG_DUT_VBR, EP_DIAG_DUT_VRSM, EP_DIAG_DUT_IRSM, EP_DIAG_DUT_PRSM, EP_DIAG_DUT_R_STD };
 	Int16U EPSized[EP_COUNT] = { VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE,
@@ -76,14 +76,14 @@ void CONTROL_Init()
 								  (pInt16U)CONTROL_Values_DiagVbr, (pInt16U)CONTROL_Values_DiagVrsm,
 								  (pInt16U)CONTROL_Values_DiagIrsm, (pInt16U)CONTROL_Values_DiagPrsm, (pInt16U)CONTROL_Values_DiagRstd };
 
-	// Конфигурация сервиса работы Data-table и EPROM
+	// РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРµСЂРІРёСЃР° СЂР°Р±РѕС‚С‹ Data-table Рё EPROM
 	EPROMServiceConfig EPROMService = { (FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT };
-	// Инициализация data table
+	// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ data table
 	DT_Init(EPROMService, FALSE);
-	// Инициализация device profile
+	// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ device profile
 	DEVPROFILE_Init(&CONTROL_DispatchAction, &CycleActive);
 	DEVPROFILE_InitEPService(EPIndexes, EPSized, EPCounters, EPDatas);
-	// Сброс значений
+	// РЎР±СЂРѕСЃ Р·РЅР°С‡РµРЅРёР№
 	DEVPROFILE_ResetControlSection();
 	CONTROL_ResetToDefaults(TRUE);
 }
@@ -287,7 +287,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 
-		// Обратная совместимость
+		// РћР±СЂР°С‚РЅР°СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ
 		case 72:
 			break;
 
@@ -301,7 +301,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_HandleBatteryCharge()
 {
-	// Мониторинг уровня заряда батареи
+	// РњРѕРЅРёС‚РѕСЂРёРЅРі СѓСЂРѕРІРЅСЏ Р·Р°СЂСЏРґР° Р±Р°С‚Р°СЂРµРё
 	if (SUB_State == SS_Charge || SUB_State == SS_None || SUB_State == SS_PulsePrepCheckV)
 	{
 		float BatteryVoltage1 = MEASURE_BatteryVoltage1();
@@ -311,7 +311,7 @@ void CONTROL_HandleBatteryCharge()
 		DataTable[REG_BAT1_VOLTAGE] = (uint16_t)(BatteryVoltage1 * 10);
 		DataTable[REG_BAT2_VOLTAGE] = (uint16_t)(BatteryVoltage2 * 10);
 
-		// Переключение состояния в случае заряда
+		// РџРµСЂРµРєР»СЋС‡РµРЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ РІ СЃР»СѓС‡Р°Рµ Р·Р°СЂСЏРґР°
 		if (SUB_State == SS_Charge)
 		{
 			if (BatteryVoltage1 >= VoltageThreshold && BatteryVoltage2 >= VoltageThreshold)
@@ -323,7 +323,7 @@ void CONTROL_HandleBatteryCharge()
 				CONTROL_SwitchToFault(DF_BATTERY);
 		}
 
-		// Поддержание уровня заряда
+		// РџРѕРґРґРµСЂР¶Р°РЅРёРµ СѓСЂРѕРІРЅСЏ Р·Р°СЂСЏРґР°
 		if ((CONTROL_State == DS_Ready) ||
 			(CONTROL_State == DS_InProcess && SUB_State == SS_PulsePrepCheckV))
 		{
@@ -385,7 +385,7 @@ void CONTROL_HandlePulse()
 		case SS_PulsePrepStep1:
 			if (CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
 			{
-				// Окончание размагничивания
+				// РћРєРѕРЅС‡Р°РЅРёРµ СЂР°Р·РјР°РіРЅРёС‡РёРІР°РЅРёСЏ
 				LL_Demagnitization(FALSE);
 				CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIMEOUT_P2P_VOLTAGE;
 				SUB_State = SS_PulsePrepCheckV;
@@ -394,7 +394,7 @@ void CONTROL_HandlePulse()
 
 		case SS_PulsePrepCheckV:
 			{
-				// Проверка уровня напряжения на батареях
+				// РџСЂРѕРІРµСЂРєР° СѓСЂРѕРІРЅСЏ РЅР°РїСЂСЏР¶РµРЅРёСЏ РЅР° Р±Р°С‚Р°СЂРµСЏС…
 				float BatteryVoltage1 = MEASURE_BatteryVoltage1();
 				float BatteryVoltage2 = MEASURE_BatteryVoltage2();
 				float VoltageThreshold = (float)DataTable[REG_VBAT_THRESHOLD];
@@ -422,23 +422,23 @@ void CONTROL_HandlePulse()
 			{
 				ProcessResult Result;
 
-				// Уменьшение счётчика
+				// РЈРјРµРЅСЊС€РµРЅРёРµ СЃС‡С‘С‚С‡РёРєР°
 				if (CONTROL_PulsesRemain)
 					CONTROL_PulsesRemain--;
 				DataTable[REG_COUNTER_MEASURE] = PULSES_MAX - CONTROL_PulsesRemain;
 
-				// Обработка результатов
+				// РћР±СЂР°Р±РѕС‚РєР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
 				LOGIC_PulseFinished();
 				Result = LOGIC_ProcessOutputData();
 				CONTROL_SaveResultToEndpoints(Result);
 
-				// Проверка условий остановки
+				// РџСЂРѕРІРµСЂРєР° СѓСЃР»РѕРІРёР№ РѕСЃС‚Р°РЅРѕРІРєРё
 				uint16_t Warning = CONTROL_HandleWarningCondition(Result);
 
-				// Ошибка по мощности
+				// РћС€РёР±РєР° РїРѕ РјРѕС‰РЅРѕСЃС‚Рё
 				float Perror = PowerTarget - Result.Prsm;
 
-				// В случае критического роста ошибки (неустойчивость регулирования) - остановка
+				// Р’ СЃР»СѓС‡Р°Рµ РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ СЂРѕСЃС‚Р° РѕС€РёР±РєРё (РЅРµСѓСЃС‚РѕР№С‡РёРІРѕСЃС‚СЊ СЂРµРіСѓР»РёСЂРѕРІР°РЅРёСЏ) - РѕСЃС‚Р°РЅРѕРІРєР°
 				if ((fabs(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
 					(CONTROL_PulsesRemain < (PULSES_MAX - 1)) && CONTROL_PowerRegulator)
 				{
@@ -446,24 +446,24 @@ void CONTROL_HandlePulse()
 				}
 				else
 				{
-					// Проверка условий перехода к следующему шагу
+					// РџСЂРѕРІРµСЂРєР° СѓСЃР»РѕРІРёР№ РїРµСЂРµС…РѕРґР° Рє СЃР»РµРґСѓСЋС‰РµРјСѓ С€Р°РіСѓ
 					if ((fabs(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)) &&
 						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
 					{
 						float Isetpoint, Ki;
 
-						// Следующий шаг
+						// РЎР»РµРґСѓСЋС‰РёР№ С€Р°Рі
 						CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
 						SUB_State = SS_PulsePrepStep1;
 
-						// Интегральная составляющая ошибки
+						// РРЅС‚РµРіСЂР°Р»СЊРЅР°СЏ СЃРѕСЃС‚Р°РІР»СЏСЋС‰Р°СЏ РѕС€РёР±РєРё
 						Ki = (float)DataTable[REG_PP_KI] / 1000;
 
-						// Для первого импульса ошибка не учитывается
+						// Р”Р»СЏ РїРµСЂРІРѕРіРѕ РёРјРїСѓР»СЊСЃР° РѕС€РёР±РєР° РЅРµ СѓС‡РёС‚С‹РІР°РµС‚СЃСЏ
 						if (CONTROL_PulsesRemain < (PULSES_MAX - 1))
 							PowerRegulatorErrKi += Perror * Ki;
 
-						// Расчёт корректировки
+						// Р Р°СЃС‡С‘С‚ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё
 						if (Result.LoadR)
 							Isetpoint = Result.Irsm * sqrt(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
 						else
@@ -473,11 +473,11 @@ void CONTROL_HandlePulse()
 					}
 					else
 					{
-						// Регулятор не вышел на мощность
+						// Р РµРіСѓР»СЏС‚РѕСЂ РЅРµ РІС‹С€РµР» РЅР° РјРѕС‰РЅРѕСЃС‚СЊ
 						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
 							Warning = WARNING_ACCURACY;
 
-						// Завершение работы
+						// Р—Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹
 						SUB_State = SS_None;
 						CONTROL_SetDeviceState(DS_Ready);
 						CONTROL_SaveResultToRegisters(Result);

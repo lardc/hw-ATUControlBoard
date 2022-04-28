@@ -1,4 +1,4 @@
-// Header
+ï»¿// Header
 #include "InitConfig.h"
 //
 // Includes
@@ -20,45 +20,45 @@ void SysClk_Config()
 
 void IO_Config()
 {
-	// Âêëþ÷åíèå òàêòèðîâàíèÿ ïîðòîâ
+	// Ð’ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ñ‚Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Ð¿Ð¾Ñ€Ñ‚Ð¾Ð²
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 	
-	// Àíàëîãîâûå âõîäû
-	GPIO_Config (GPIOA, Pin_3, Analog, NoPull, HighSpeed, NoPull);					// PA3 - âõîä ÀÖÏ (íàïðÿæåíèå áàòàðåè 1)
-	GPIO_Config (GPIOA, Pin_2, Analog, NoPull, HighSpeed, NoPull);					// PA2 - âõîä ÀÖÏ (íàïðÿæåíèå áàòàðåè 2)
-	GPIO_Config (GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);					// PA0 - âõîä ÀÖÏ (íàïðÿæåíèå DUT)
+	// ÐÐ½Ð°Ð»Ð¾Ð³Ð¾Ð²Ñ‹Ðµ Ð²Ñ…Ð¾Ð´Ñ‹
+	GPIO_Config (GPIOA, Pin_3, Analog, NoPull, HighSpeed, NoPull);					// PA3 - Ð²Ñ…Ð¾Ð´ ÐÐ¦ÐŸ (Ð½Ð°Ð¿Ñ€ÑÐ¶ÐµÐ½Ð¸Ðµ Ð±Ð°Ñ‚Ð°Ñ€ÐµÐ¸ 1)
+	GPIO_Config (GPIOA, Pin_2, Analog, NoPull, HighSpeed, NoPull);					// PA2 - Ð²Ñ…Ð¾Ð´ ÐÐ¦ÐŸ (Ð½Ð°Ð¿Ñ€ÑÐ¶ÐµÐ½Ð¸Ðµ Ð±Ð°Ñ‚Ð°Ñ€ÐµÐ¸ 2)
+	GPIO_Config (GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);					// PA0 - Ð²Ñ…Ð¾Ð´ ÐÐ¦ÐŸ (Ð½Ð°Ð¿Ñ€ÑÐ¶ÐµÐ½Ð¸Ðµ DUT)
 	GPIO_Config (GPIOA, Pin_1, Analog, NoPull, HighSpeed, NoPull);					//
-	GPIO_Config (GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);					// PA4 - âûõîä ÖÀÏà (èìïóëüñ)
-	GPIO_Config (GPIOA, Pin_5, Analog, NoPull, HighSpeed, NoPull);					// PA5 - âûõîä ÖÀÏà (ñìåùåíèå)
+	GPIO_Config (GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);					// PA4 - Ð²Ñ‹Ñ…Ð¾Ð´ Ð¦ÐÐŸÐ° (Ð¸Ð¼Ð¿ÑƒÐ»ÑŒÑ)
+	GPIO_Config (GPIOA, Pin_5, Analog, NoPull, HighSpeed, NoPull);					// PA5 - Ð²Ñ‹Ñ…Ð¾Ð´ Ð¦ÐÐŸÐ° (ÑÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ)
 	//
-	GPIO_Config (GPIOA, Pin_7, Analog, NoPull, HighSpeed, NoPull);					// PA7 - âõîä ÀÖÏ (òîê DUT)
+	GPIO_Config (GPIOA, Pin_7, Analog, NoPull, HighSpeed, NoPull);					// PA7 - Ð²Ñ…Ð¾Ð´ ÐÐ¦ÐŸ (Ñ‚Ð¾Ðº DUT)
 	
-	// Âûõîäû
-	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);				// PA8 - SYNC ëèíèÿ âíåøíåé ñèíõðîíèçàöèè
+	// Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹
+	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);				// PA8 - SYNC Ð»Ð¸Ð½Ð¸Ñ Ð²Ð½ÐµÑˆÐ½ÐµÐ¹ ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð¸Ð·Ð°Ñ†Ð¸Ð¸
 	GPIO_Bit_Rst(GPIOA, Pin_8);
-	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);			 	// PA6 - PS_STOP ëèíèÿ ïðèíóäèòåëüíîé îñòàíîâêè çàðÿäíûõ óñòðîéñòâ
+	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);			 	// PA6 - PS_STOP Ð»Ð¸Ð½Ð¸Ñ Ð¿Ñ€Ð¸Ð½ÑƒÐ´Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹ Ð¾ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ Ð·Ð°Ñ€ÑÐ´Ð½Ñ‹Ñ… ÑƒÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²
 	GPIO_Bit_Rst(GPIOA, Pin_6);
-	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);				// PB0 - ACH1_RST ñáðîñ óñòàâêè àíàëîãîâîãî êàíàëà 1
+	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);				// PB0 - ACH1_RST ÑÐ±Ñ€Ð¾Ñ ÑƒÑÑ‚Ð°Ð²ÐºÐ¸ Ð°Ð½Ð°Ð»Ð¾Ð³Ð¾Ð²Ð¾Ð³Ð¾ ÐºÐ°Ð½Ð°Ð»Ð° 1
 	GPIO_Bit_Set(GPIOB, Pin_0);
-	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);				// PB1 - ACH2_RST ñáðîñ óñòàâêè àíàëîãîâîãî êàíàëà 2
+	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);				// PB1 - ACH2_RST ÑÐ±Ñ€Ð¾Ñ ÑƒÑÑ‚Ð°Ð²ÐºÐ¸ Ð°Ð½Ð°Ð»Ð¾Ð³Ð¾Ð²Ð¾Ð³Ð¾ ÐºÐ°Ð½Ð°Ð»Ð° 2
 	GPIO_Bit_Set(GPIOB, Pin_1);
-	GPIO_Config (GPIOB, Pin_2, Output, PushPull, HighSpeed, NoPull);				// PB2 - PS_ENABLE âêëþ÷åíèå çàðÿäíûõ óñòðîéñòâ
+	GPIO_Config (GPIOB, Pin_2, Output, PushPull, HighSpeed, NoPull);				// PB2 - PS_ENABLE Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð·Ð°Ñ€ÑÐ´Ð½Ñ‹Ñ… ÑƒÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²
 	GPIO_Bit_Rst(GPIOB, Pin_2);
-	GPIO_Config (GPIOB, Pin_4, Output, PushPull, HighSpeed, NoPull);				// PB4 - DSCHRG_SWITCH âêëþ÷åíèå ðàçðÿäíûõ ðåëå
+	GPIO_Config (GPIOB, Pin_4, Output, PushPull, HighSpeed, NoPull);				// PB4 - DSCHRG_SWITCH Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ñ€Ð°Ð·Ñ€ÑÐ´Ð½Ñ‹Ñ… Ñ€ÐµÐ»Ðµ
 	GPIO_Bit_Rst(GPIOB, Pin_4);
-	GPIO_Config (GPIOB, Pin_10, Output, OpenDrain, HighSpeed, Pull_Up);				// PB10 - AMP_LOCK áëîêèðîâàíèå ñèëîâûõ âûõîäîâ àíàëîãîâûõ ÎÓ
+	GPIO_Config (GPIOB, Pin_10, Output, OpenDrain, HighSpeed, Pull_Up);				// PB10 - AMP_LOCK Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ ÑÐ¸Ð»Ð¾Ð²Ñ‹Ñ… Ð²Ñ‹Ñ…Ð¾Ð´Ð¾Ð² Ð°Ð½Ð°Ð»Ð¾Ð³Ð¾Ð²Ñ‹Ñ… ÐžÐ£
 	GPIO_Bit_Set(GPIOB, Pin_10);
-	GPIO_Config (GPIOB, Pin_12, Output, PushPull, HighSpeed, NoPull);				// PB12 - LED ñâåòîäèîä íà ÏÏ
+	GPIO_Config (GPIOB, Pin_12, Output, PushPull, HighSpeed, NoPull);				// PB12 - LED ÑÐ²ÐµÑ‚Ð¾Ð´Ð¸Ð¾Ð´ Ð½Ð° ÐŸÐŸ
 	GPIO_Bit_Rst(GPIOB, Pin_12);
-	GPIO_Config (GPIOB, Pin_13, Output, PushPull, HighSpeed, NoPull);				// PB13 - IND âíåøíÿÿ èíäèêàöèÿ
+	GPIO_Config (GPIOB, Pin_13, Output, PushPull, HighSpeed, NoPull);				// PB13 - IND Ð²Ð½ÐµÑˆÐ½ÑÑ Ð¸Ð½Ð´Ð¸ÐºÐ°Ñ†Ð¸Ñ
 	GPIO_Bit_Rst(GPIOB, Pin_13);
-	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);				// PB14 - DMGN_SWITCH âêëþ÷åíèå îáìîòêè ðàçìàãíè÷èâàíèÿ
+	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);				// PB14 - DMGN_SWITCH Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð¾Ð±Ð¼Ð¾Ñ‚ÐºÐ¸ Ñ€Ð°Ð·Ð¼Ð°Ð³Ð½Ð¸Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ñ
 	GPIO_Bit_Rst(GPIOB, Pin_14);
-	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, NoPull);				// PB15 - BC_CONTROL óïðàâëåíèå êîíòàêòîðîì
+	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, NoPull);				// PB15 - BC_CONTROL ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ð¾Ñ€Ð¾Ð¼
 	GPIO_Bit_Set(GPIOB, Pin_15);
 	
-	// Àëüòåðíàòèâíûå ôóíêöèè
+	// ÐÐ»ÑŒÑ‚ÐµÑ€Ð½Ð°Ñ‚Ð¸Ð²Ð½Ñ‹Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸
 	GPIO_Config (GPIOA, Pin_11, AltFn, PushPull, HighSpeed, NoPull);				// PA11(CAN RX)
 	GPIO_AltFn  (GPIOA, Pin_11, AltFn_9);
 	GPIO_Config (GPIOA, Pin_12, AltFn, PushPull, HighSpeed, NoPull);				// PA12(CAN TX)
@@ -75,7 +75,7 @@ void CAN_Config()
 	RCC_CAN_Clk_EN(CAN_1_ClkEN);
 	NCAN_Init(SYSCLK, CAN_BAUDRATE, FALSE);
 	NCAN_FIFOInterrupt(TRUE);
-	NCAN_FilterInit(0, 0, 0);		// Ôèëüòð 0 ïðîïóñêàåò âñå ñîîáùåíèÿ
+	NCAN_FilterInit(0, 0, 0);		// Ð¤Ð¸Ð»ÑŒÑ‚Ñ€ 0 Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÐµÑ‚ Ð²ÑÐµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ
 }
 //------------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ void ADC_Config()
 	ADC_SoftTrigConfig(ADC1);
 	ADC_SoftTrigConfig(ADC2);
 
-	// Êîíôèãóðàöèÿ è îòêëþ÷åíèå DMA
+	// ÐšÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ñ Ð¸ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ DMA
 	ADC_DMAConfig(ADC1);
 	ADC_DMAConfig(ADC2);
 	ADC_DMAEnable(ADC1, false);
@@ -207,20 +207,20 @@ void DMA_Config()
 	DMA_Clk_Enable(DMA1_ClkEN);
 	DMA_Clk_Enable(DMA2_ClkEN);
 
-	// DMA äëÿ ÖÀÏ
+	// DMA Ð´Ð»Ñ Ð¦ÐÐŸ
 	DMA_Reset(DMA_DAC_CHANNEL);
 	DMA_Interrupt(DMA_DAC_CHANNEL, DMA_TRANSFER_COMPLETE, 0, true);
 	DMAChannelX_DataConfig(DMA_DAC_CHANNEL, (uint32_t)LOGIC_OutputPulse, (uint32_t)(&DAC->DHR12R1), PULSE_ARR_MAX_LENGTH);
 	DMAChannelX_Config(DMA_DAC_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
 						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_MEM);
 
-	// DMA äëÿ ÀÖÏ íàïðÿæåíèÿ íà DUT
+	// DMA Ð´Ð»Ñ ÐÐ¦ÐŸ Ð½Ð°Ð¿Ñ€ÑÐ¶ÐµÐ½Ð¸Ñ Ð½Ð° DUT
 	DMA_Reset(DMA_ADC_DUT_V_CHANNEL);
 	DMAChannelX_DataConfig(DMA_ADC_DUT_V_CHANNEL, (uint32_t)LOGIC_DUTVoltageRaw, (uint32_t)(&ADC1->DR), PULSE_ARR_MAX_LENGTH);
 	DMAChannelX_Config(DMA_ADC_DUT_V_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
 						DMA_MINC_EN, DMA_PINC_DIS, DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 
-	// DMA äëÿ ÀÖÏ òîêà íà DUT
+	// DMA Ð´Ð»Ñ ÐÐ¦ÐŸ Ñ‚Ð¾ÐºÐ° Ð½Ð° DUT
 	DMA_Reset(DMA_ADC_DUT_I_CHANNEL);
 	DMAChannelX_DataConfig(DMA_ADC_DUT_I_CHANNEL, (uint32_t)LOGIC_DUTCurrentRaw, (uint32_t)(&ADC2->DR), PULSE_ARR_MAX_LENGTH);
 	DMAChannelX_Config(DMA_ADC_DUT_I_CHANNEL, DMA_MEM2MEM_DIS, DMA_LvlPriority_LOW, DMA_MSIZE_16BIT, DMA_PSIZE_16BIT,
