@@ -55,7 +55,12 @@ void IO_Config()
 	GPIO_Bit_Rst(GPIOB, Pin_13);
 	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);				// PB14 - DMGN_SWITCH включение обмотки размагничивания
 	GPIO_Bit_Rst(GPIOB, Pin_14);
-	GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, NoPull);				// PB15 - BC_CONTROL управление контактором
+
+	#ifndef PNEUMATIC_CONTACTOR
+		GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, NoPull);			// PB15 - BC_CONTROL управление пневмоконтактором
+	#else
+		GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, Pull_Down);		// PB15 - BC_CONTROL управление мех. контактором
+	#endif
 	GPIO_Bit_Set(GPIOB, Pin_15);
 	
 	// Альтернативные функции

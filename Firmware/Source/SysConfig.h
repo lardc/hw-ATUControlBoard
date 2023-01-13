@@ -37,4 +37,8 @@
 #define ADC2_CURRENT_CHANNEL			4				// АЦП2 номер канала тока
 // ----------------------------------------------
 
+// Type contactor
+#define PNEUMATIC_CONTACTOR				FALSE			// Пневматический контактор?
+// ----------------------------------------------
+
 #endif // __SYSCONFIG_H
