@@ -32,7 +32,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] =
   {DAC_PULSE_WIDTH_MIN, DAC_PULSE_WIDTH_MAX, DAC_PULSE_WIDTH_DEF}, // 20
   {0, SYNC_SHIFT_MAX, 0},							// 21
   {PP_KI_MIN, PP_KI_MAX, PP_KI_DEF},				// 22
-  {0, 0, 0},										// 23
+  {0, INT16U_MAX, 1000},							// 23
   {0, 0, 0},										// 24
   {0, 0, 0},										// 25
   {0, 0, 0},										// 26

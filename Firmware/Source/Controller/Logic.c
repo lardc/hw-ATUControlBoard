@@ -301,6 +301,7 @@ ProcessResult LOGIC_ProcessOutputData()
 	Vrsm /= MEASURE_AVG;
 	Irsm /= MEASURE_AVG;
 	Prsm = Vrsm * Irsm / 1000;
+	Prsm = (float)DataTable[REG_W_DUT_K] / 1000 * Prsm;
 
 	// Возврат результата
 	ProcessResult ret;
