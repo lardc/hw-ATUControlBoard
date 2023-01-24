@@ -447,7 +447,7 @@ void CONTROL_HandlePulse()
 				else
 				{
 					// Проверка условий перехода к следующему шагу
-					if ((fabs(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)) &&
+					if ((fabs(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
 						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
 					{
 						float Isetpoint, Ki;
@@ -474,7 +474,8 @@ void CONTROL_HandlePulse()
 					else
 					{
 						// Регулятор не вышел на мощность
-						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
+						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE) &&
+							(fabs(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
 							Warning = WARNING_ACCURACY;
 
 						// Завершение работы
