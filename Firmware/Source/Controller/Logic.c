@@ -52,7 +52,7 @@ void LOGIC_ResetHWToDefaults(bool StopPowerSupply)
 	while (!LOGIC_IsPulseFinished());
 
 	LL_ExternalLED(FALSE);
-	LL_PowerSupplyStop(FALSE);
+	LL_PowerSupplyStop(TRUE);
 	LL_Sync(FALSE);
 	LL_Contactor(FALSE);
 	LL_Demagnitization(FALSE);

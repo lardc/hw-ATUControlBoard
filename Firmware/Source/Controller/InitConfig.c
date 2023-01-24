@@ -38,7 +38,7 @@ void IO_Config()
 	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);				// PA8 - SYNC линия внешней синхронизации
 	GPIO_Bit_Rst(GPIOA, Pin_8);
 	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);			 	// PA6 - PS_STOP линия принудительной остановки зарядных устройств
-	GPIO_Bit_Rst(GPIOA, Pin_6);
+	GPIO_Bit_Set(GPIOA, Pin_6);
 	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);				// PB0 - ACH1_RST сброс уставки аналогового канала 1
 	GPIO_Bit_Set(GPIOB, Pin_0);
 	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);				// PB1 - ACH2_RST сброс уставки аналогового канала 2
