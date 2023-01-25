@@ -17,6 +17,7 @@
 #include "Logic.h"
 #include "Measurement.h"
 #include "math.h"
+#include "BCCIxParams.h"
 
 // Types
 //
@@ -80,6 +81,7 @@ void CONTROL_Init()
 	EPROMServiceConfig EPROMService = { (FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT };
 	// Инициализация data table
 	DT_Init(EPROMService, FALSE);
+	DT_SaveFirmwareInfo(CAN_SLAVE_NID, CAN_MASTER_NID);
 	// Инициализация device profile
 	DEVPROFILE_Init(&CONTROL_DispatchAction, &CycleActive);
 	DEVPROFILE_InitEPService(EPIndexes, EPSized, EPCounters, EPDatas);
