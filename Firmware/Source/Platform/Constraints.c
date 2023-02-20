@@ -84,7 +84,7 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
   {0, 0, 0},										// 68
   {0, 0, 0},										// 69
   {0, DIAG_DAC_MAX_PULSE, 0},						// 70
-  {0, 0, 0},										// 71
+  {0, 1, 0},										// 71
   {0, 0, 0},										// 72
   {0, 0, 0},										// 73
   {0, 0, 0},										// 74

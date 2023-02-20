@@ -15,4 +15,7 @@
 #include "ZwIWDG.h"
 #include "ZwNFLASH.h"
 
+// Определения для входных портов
+GPIO_PortPinSettingMacro GPIO_OPENING_SEN				= {GPIOB, Pin_5};
+
 #endif // __BOARD_H

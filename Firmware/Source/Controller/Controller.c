@@ -289,6 +289,15 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 
+		case ACT_DBG_OPENING_SENSOR:
+			if (CONTROL_State == DS_None)
+			{
+				DataTable[REG_OPENING_SEN]=GPIO_GetState(GPIO_OPENING_SEN);
+			}
+			else
+				*pUserError = ERR_OPERATION_BLOCKED;
+			break;
+
 		// Обратная совместимость
 		case 72:
 			break;

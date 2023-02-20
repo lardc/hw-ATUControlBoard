@@ -16,6 +16,7 @@
 #define ACT_DBG_PULSE_PS_STOP					14		// Включение остановки зарядных устройств на 1сек.
 #define ACT_DBG_PULSE_CONTACTOR					15		// Включение контактора на 1сек.
 #define ACT_DBG_PULSE_EXT_LED					16		// Включение внешней индикации на 1сек.
+#define ACT_DBG_OPENING_SENSOR					17		//считывание состояния датчика размыкания
 //
 #define ACT_DBG_GENERATE_DAC_SETPOINT			20		// Формирование массива уставки для ЦАП
 #define ACT_DBG_DAC_PULSE						21		// Формирование импульса на ЦАП
@@ -71,6 +72,7 @@
 #define REG_SET_PRE_PULSE_TIME					67		// Длительность предварительного импульса (в мкс)
 //
 #define REG_DIAG_DAC_PULSE						70		// Уставка ЦАП для диагностического импульса
+#define REG_OPENING_SEN							71		//Состояния датчика размыкания
 
 // -----------------------------------------------
 
