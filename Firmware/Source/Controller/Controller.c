@@ -325,7 +325,8 @@ void CONTROL_HandleBatteryCharge()
 		// Переключение состояния в случае заряда
 		if (SUB_State == SS_Charge)
 		{
-			if (BatteryVoltage1 >= VoltageThreshold && BatteryVoltage2 >= VoltageThreshold)
+			if (BatteryVoltage1 >= VoltageThreshold &&
+					(BAT2_CHARGE_IGNORE || BatteryVoltage2 >= VoltageThreshold))
 			{
 				SUB_State = SS_None;
 				CONTROL_SetDeviceState(DS_Ready);
@@ -339,11 +340,11 @@ void CONTROL_HandleBatteryCharge()
 			(CONTROL_State == DS_InProcess && SUB_State == SS_PulsePrepCheckV))
 		{
 			if (BatteryVoltage1 >= (VoltageThreshold + BAT_VOLTAGE_DELTA) &&
-				BatteryVoltage2 >= (VoltageThreshold + BAT_VOLTAGE_DELTA))
+				(BAT2_CHARGE_IGNORE || BatteryVoltage2 >= (VoltageThreshold + BAT_VOLTAGE_DELTA)))
 				LL_PowerSupplyStop(TRUE);
 
 			if (BatteryVoltage1 < VoltageThreshold ||
-				BatteryVoltage2 < VoltageThreshold)
+				(!BAT2_CHARGE_IGNORE && BatteryVoltage2 < VoltageThreshold))
 				LL_PowerSupplyStop(FALSE);
 		}
 	}
