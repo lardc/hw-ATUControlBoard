@@ -139,8 +139,11 @@ static Boolean DEVPROFILE_Validate16(Int16U Address, Int16U Data)
 	}
 	else if (Address < DATA_TABLE_WP_START)
 	{
-		if (Data < VConstraint[Address - DATA_TABLE_WR_START].Min
-			|| Data > VConstraint[Address - DATA_TABLE_WR_START].Max)
+		// Значение для максимальной мощности
+		Int16U MaxValue = (Address == REG_SET_PULSE_POWER && DataTable[REG_REDEFINE_MAX_POWER])
+				? DataTable[REG_REDEFINE_MAX_POWER] : VConstraint[Address - DATA_TABLE_WR_START].Max;
+
+		if (Data < VConstraint[Address - DATA_TABLE_WR_START].Min || Data > MaxValue)
 			return FALSE;
 	}
 
