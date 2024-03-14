@@ -312,7 +312,8 @@ ProcessResult LOGIC_ProcessOutputData()
 	ret.Max_dVdt = Max_dVdt;
 	ret.Vmax = Vmax;
 	ret.Rstd = ResAvgSq;
-	ret.LoadR = (ResAvgSq < LOAD_R_STDEV) ? true : false;
+	float MaxSTDev = DataTable[REG_REDEFINE_R_STDEV] ? (DataTable[REG_REDEFINE_R_STDEV] / 10) : LOAD_R_STDEV;
+	ret.LoadR = (ResAvgSq < MaxSTDev) ? true : false;
 
 	return ret;
 }

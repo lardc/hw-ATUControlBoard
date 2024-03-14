@@ -503,12 +503,13 @@ void CONTROL_HandlePulse()
 
 uint16_t CONTROL_HandleWarningCondition(ProcessResult Result)
 {
-	if (Result.Vmax > MEAS_BREAK_IDLE_V && Result.Vbr > MEAS_BREAK_IDLE_V)
+	float IdleV = DataTable[REG_REDEFINE_IDLE_V] ? DataTable[REG_REDEFINE_IDLE_V] : MEAS_BREAK_IDLE_V;
+	if (Result.Vmax > IdleV && Result.Vbr > IdleV)
 		return WARNING_IDLE;
 	else if (Result.Vmax < MEAS_BREAK_SHORT_V && Result.Vbr < MEAS_BREAK_SHORT_V)
 		return WARNING_SHORT;
-
-	return WARNING_NONE;
+	else
+		return WARNING_NONE;
 }
 //-----------------------------------------------
 
