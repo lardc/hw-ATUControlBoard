@@ -1,81 +1,72 @@
 ﻿// Header
 #include "LowLevel.h"
 
+// Include
+#include "Board.h"
+
 // Functions
-//
-// LED on board
 void LL_ToggleBoardLED()
 {
 	GPIO_Bit_Toggle(GPIOB, Pin_12);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// External LED
 void LL_ExternalLED(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_13) : GPIO_Bit_Rst(GPIOB, Pin_13);
+	GPIO_SetState(GPIO_LAMP_EXT, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Unit cooler
 void LL_PowerSupplyStop(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOA, Pin_6) : GPIO_Bit_Rst(GPIOA, Pin_6);
+	GPIO_SetState(GPIO_PS_MUTE, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// External SYNC
-void LL_Sync(bool State)
+void LL_ExternalSync(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOA, Pin_8) : GPIO_Bit_Rst(GPIOA, Pin_8);
+	GPIO_SetState(GPIO_SYNC_EXT, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Contactor control
 void LL_Contactor(bool State)
 {
-	State ? GPIO_Bit_Rst(GPIOB, Pin_15) : GPIO_Bit_Set(GPIOB, Pin_15);
+	GPIO_SetState(GPIO_CONTACTOR, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Amplifier lock control
 void LL_AmpLock(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_10) : GPIO_Bit_Rst(GPIOB, Pin_10);
+	GPIO_SetState(GPIO_AMP_LOCK, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Demagnitization coil control
 void LL_Demagnitization(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_14) : GPIO_Bit_Rst(GPIOB, Pin_14);
+	GPIO_SetState(GPIO_DEMAGNET_SW, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Channel 1 control
 void LL_MuteChannel1(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_0) : GPIO_Bit_Rst(GPIOB, Pin_0);
+	GPIO_SetState(GPIO_ACH1_MUTE, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Channel 2 control
 void LL_MuteChannel2(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_1) : GPIO_Bit_Rst(GPIOB, Pin_1);
+	GPIO_SetState(GPIO_ACH2_MUTE, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Power Supply control
 void LL_PowerOn(bool State)
 {
-	State ? GPIO_Bit_Set(GPIOB, Pin_2) : GPIO_Bit_Rst(GPIOB, Pin_2);
+	GPIO_SetState(GPIO_PS_230V_CTRL, State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------
 
-// Discharge control
 void LL_Discharge(bool State)
 {
-	State ? GPIO_Bit_Rst(GPIOB, Pin_4) : GPIO_Bit_Set(GPIOB, Pin_4);
+	GPIO_SetState(GPIO_DISCHARGE, !State);
 }
-//------------------------------------------------------------------------------
+//-----------------------------------

@@ -53,7 +53,7 @@ void LOGIC_ResetHWToDefaults(bool StopPowerSupply)
 
 	LL_ExternalLED(FALSE);
 	LL_PowerSupplyStop(TRUE);
-	LL_Sync(FALSE);
+	LL_ExternalSync(FALSE);
 	LL_Contactor(FALSE);
 	LL_Demagnitization(FALSE);
 
@@ -335,7 +335,7 @@ void LOGIC_DiagPulseDAC()
 	Delay_mS(10);
 
 	// Запуск формирования
-	LL_Sync(TRUE);
+	LL_ExternalSync(TRUE);
 	LL_PowerSupplyStop(TRUE);
 
 	// Формирование выхода ЦАП
@@ -353,7 +353,7 @@ void LOGIC_DiagPulseDAC()
 	LL_MuteChannel2(TRUE);
 	LL_AmpLock(TRUE);
 
-	LL_Sync(FALSE);
+	LL_ExternalSync(FALSE);
 
 	// Отключение коммутации
 	LL_PowerSupplyStop(FALSE);

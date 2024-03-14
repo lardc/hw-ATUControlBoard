@@ -69,7 +69,7 @@ void TIM2_IRQHandler()
 				{
 					TIM_Config(TIM2, SYSCLK, TimePreCurrentPlate + TimeSyncShift);
 					//
-					LL_Sync(TRUE);
+					LL_ExternalSync(TRUE);
 					TIM_Start(TIM6);
 					HS_State = HSS_Plate;
 				}
@@ -79,14 +79,14 @@ void TIM2_IRQHandler()
 				{
 					TIM_Config(TIM2, SYSCLK, TimePulseWidth / 2);
 					//
-					LL_Sync(FALSE);
+					LL_ExternalSync(FALSE);
 					HS_State = HSS_PulseTop;
 				}
 				break;
 
 			case HSS_PulseTop:
 				{
-					LL_Sync(TRUE);
+					LL_ExternalSync(TRUE);
 					HS_State = HSS_PulseEnd;
 				}
 				break;
@@ -96,7 +96,7 @@ void TIM2_IRQHandler()
 					TIM_Stop(TIM2);
 					TIM_Reset(TIM2);
 					//
-					LL_Sync(FALSE);
+					LL_ExternalSync(FALSE);
 					HS_State = HSS_WaitFinish;
 				}
 				break;

@@ -207,9 +207,9 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_DBG_PULSE_SYNC:
 			if (CONTROL_State == DS_None)
 			{
-				LL_Sync(TRUE);
+				LL_ExternalSync(TRUE);
 				Delay_mS(1000);
-				LL_Sync(FALSE);
+				LL_ExternalSync(FALSE);
 			}
 			else
 				*pUserError = ERR_OPERATION_BLOCKED;
@@ -292,7 +292,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_DBG_OPENING_SENSOR:
 			if (CONTROL_State == DS_None)
 			{
-				DataTable[REG_OPENING_SEN]=GPIO_GetState(GPIO_OPENING_SEN);
+				DataTable[REG_OPENING_SEN] = GPIO_GetState(GPIO_OPENING_SEN);
 			}
 			else
 				*pUserError = ERR_OPERATION_BLOCKED;

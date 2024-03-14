@@ -25,53 +25,37 @@ void IO_Config()
 	RCC_GPIO_Clk_EN(PORTB);
 	
 	// Аналоговые входы
-	GPIO_Config (GPIOA, Pin_3, Analog, NoPull, HighSpeed, NoPull);					// PA3 - вход АЦП (напряжение батареи 1)
-	GPIO_Config (GPIOA, Pin_2, Analog, NoPull, HighSpeed, NoPull);					// PA2 - вход АЦП (напряжение батареи 2)
-	GPIO_Config (GPIOA, Pin_0, Analog, NoPull, HighSpeed, NoPull);					// PA0 - вход АЦП (напряжение DUT)
-	GPIO_Config (GPIOA, Pin_1, Analog, NoPull, HighSpeed, NoPull);					//
-	GPIO_Config (GPIOA, Pin_4, Analog, NoPull, HighSpeed, NoPull);					// PA4 - выход ЦАПа (импульс)
-	GPIO_Config (GPIOA, Pin_5, Analog, NoPull, HighSpeed, NoPull);					// PA5 - выход ЦАПа (смещение)
-	//
-	GPIO_Config (GPIOA, Pin_7, Analog, NoPull, HighSpeed, NoPull);					// PA7 - вход АЦП (ток DUT)
+	GPIO_InitAnalog(GPIO_ANLG_DUT_V);
+	GPIO_InitAnalog(GPIO_ANLG_DUT_I_DUMMY);
+	GPIO_InitAnalog(GPIO_ANLG_BUT2_V);
+	GPIO_InitAnalog(GPIO_ANLG_BUT1_V);
+	GPIO_InitAnalog(GPIO_ANLG_DAC_PULSE);
+	GPIO_InitAnalog(GPIO_ANLG_DAC_OFFSET);
+	GPIO_InitAnalog(GPIO_ANLG_DUT_I);
 	
 	// Выходы
-	GPIO_Config (GPIOA, Pin_8, Output, PushPull, HighSpeed, NoPull);				// PA8 - SYNC линия внешней синхронизации
-	GPIO_Bit_Rst(GPIOA, Pin_8);
-	GPIO_Config (GPIOA, Pin_6, Output, PushPull, HighSpeed, NoPull);			 	// PA6 - PS_STOP линия принудительной остановки зарядных устройств
-	GPIO_Bit_Set(GPIOA, Pin_6);
-	GPIO_Config (GPIOB, Pin_0, Output, PushPull, HighSpeed, NoPull);				// PB0 - ACH1_RST сброс уставки аналогового канала 1
-	GPIO_Bit_Set(GPIOB, Pin_0);
-	GPIO_Config (GPIOB, Pin_1, Output, PushPull, HighSpeed, NoPull);				// PB1 - ACH2_RST сброс уставки аналогового канала 2
-	GPIO_Bit_Set(GPIOB, Pin_1);
-	GPIO_Config (GPIOB, Pin_2, Output, PushPull, HighSpeed, NoPull);				// PB2 - PS_ENABLE включение зарядных устройств
-	GPIO_Bit_Rst(GPIOB, Pin_2);
-	GPIO_Config (GPIOB, Pin_4, Output, PushPull, HighSpeed, NoPull);				// PB4 - DSCHRG_SWITCH включение разрядных реле
-	GPIO_Bit_Rst(GPIOB, Pin_4);
-	GPIO_Config (GPIOB, Pin_10, Output, OpenDrain, HighSpeed, Pull_Up);				// PB10 - AMP_LOCK блокирование силовых выходов аналоговых ОУ
-	GPIO_Bit_Set(GPIOB, Pin_10);
-	GPIO_Config (GPIOB, Pin_12, Output, PushPull, HighSpeed, NoPull);				// PB12 - LED светодиод на ПП
-	GPIO_Bit_Rst(GPIOB, Pin_12);
-	GPIO_Config (GPIOB, Pin_13, Output, PushPull, HighSpeed, NoPull);				// PB13 - IND внешняя индикация
-	GPIO_Bit_Rst(GPIOB, Pin_13);
-	GPIO_Config (GPIOB, Pin_14, Output, PushPull, HighSpeed, NoPull);				// PB14 - DMGN_SWITCH включение обмотки размагничивания
-	GPIO_Bit_Rst(GPIOB, Pin_14);
-
-	#if PNEUMATIC_CONTACTOR
-		GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, NoPull);			// PB15 - BC_CONTROL управление пневмоконтактором
-	#else
-		GPIO_Config (GPIOB, Pin_15, Output, PushPull, HighSpeed, Pull_Down);		// PB15 - BC_CONTROL управление мех. контактором
-	#endif
-	GPIO_Bit_Set(GPIOB, Pin_15);
+	GPIO_InitPushPullOutput(GPIO_SYNC_EXT);
+	GPIO_InitPushPullOutput(GPIO_PS_MUTE);
+	GPIO_InitPushPullOutput(GPIO_ACH1_MUTE);
+	GPIO_InitPushPullOutput(GPIO_ACH2_MUTE);
+	GPIO_InitPushPullOutput(GPIO_PS_230V_CTRL);
+	GPIO_InitPushPullOutput(GPIO_DISCHARGE);
+	GPIO_InitPushPullOutput(GPIO_AMP_LOCK);
+	GPIO_InitPushPullOutput(GPIO_LED);
+	GPIO_InitPushPullOutput(GPIO_LAMP_EXT);
+	GPIO_InitPushPullOutput(GPIO_DEMAGNET_SW);
+	GPIO_InitPushPullOutput(GPIO_CONTACTOR);
+	
+	GPIO_SetState(GPIO_PS_MUTE, true);
+	GPIO_SetState(GPIO_ACH1_MUTE, true);
+	GPIO_SetState(GPIO_ACH2_MUTE, true);
+	GPIO_SetState(GPIO_AMP_LOCK, true);
 	
 	// Альтернативные функции
-	GPIO_Config (GPIOA, Pin_11, AltFn, PushPull, HighSpeed, NoPull);				// PA11(CAN RX)
-	GPIO_AltFn  (GPIOA, Pin_11, AltFn_9);
-	GPIO_Config (GPIOA, Pin_12, AltFn, PushPull, HighSpeed, NoPull);				// PA12(CAN TX)
-	GPIO_AltFn  (GPIOA, Pin_12, AltFn_9);
-	GPIO_Config (GPIOA, Pin_9,  AltFn, PushPull, HighSpeed, NoPull);				// PA9(USART1 TX)
-	GPIO_AltFn  (GPIOA, Pin_9,  AltFn_7);
-	GPIO_Config (GPIOA, Pin_10, AltFn, PushPull, HighSpeed, NoPull);				// PA10(USART1 RX)
-	GPIO_AltFn  (GPIOA, Pin_10, AltFn_7);
+	GPIO_InitAltFunction(GPIO_ALT_CAN_RX, AltFn_9);
+	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
+	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
+	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
 }
 //------------------------------------------------------------------------------
 

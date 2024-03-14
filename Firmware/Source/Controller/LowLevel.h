@@ -10,7 +10,7 @@ void LL_ToggleBoardLED();
 void LL_ExternalLED(bool State);
 //
 void LL_PowerSupplyStop(bool State);
-void LL_Sync(bool State);
+void LL_ExternalSync(bool State);
 void LL_Contactor(bool State);
 void LL_AmpLock(bool State);
 void LL_Demagnitization(bool State);
