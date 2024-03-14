@@ -81,6 +81,9 @@ void CONTROL_Init()
 	EPROMServiceConfig EPROMService = { (FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT };
 	// Инициализация data table
 	DT_Init(EPROMService, FALSE);
+	// Выставление контактора после загрузки параметров его работы
+	LL_Contactor(FALSE);
+
 	DT_SaveFirmwareInfo(CAN_SLAVE_NID, CAN_MASTER_NID);
 	// Инициализация device profile
 	DEVPROFILE_Init(&CONTROL_DispatchAction, &CycleActive);
@@ -287,15 +290,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				LOGIC_DiagPulseDAC();
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
-			break;
-
-		case ACT_DBG_OPENING_SENSOR:
-			if (CONTROL_State == DS_None)
-			{
-				DataTable[REG_OPENING_SEN] = GPIO_GetState(GPIO_OPENING_SEN);
-			}
-			else
-				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 
 		// Обратная совместимость
@@ -520,6 +514,9 @@ uint16_t CONTROL_HandleWarningCondition(ProcessResult Result)
 
 void CONTROL_Idle()
 {
+	// Опрос датчика размыкания контактора
+	DataTable[REG_OPENING_SEN] = GPIO_GetState(GPIO_OPENING_SEN);
+
 	// Process battery charge
 	CONTROL_HandleBatteryCharge();
 

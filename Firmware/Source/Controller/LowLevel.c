@@ -3,6 +3,8 @@
 
 // Include
 #include "Board.h"
+#include "DataTable.h"
+#include "DeviceProfile.h"
 
 // Functions
 void LL_ToggleBoardLED()
@@ -31,7 +33,7 @@ void LL_ExternalSync(bool State)
 
 void LL_Contactor(bool State)
 {
-	GPIO_SetState(GPIO_CONTACTOR, State);
+	GPIO_SetState(GPIO_CONTACTOR, DataTable[REG_INVERT_CONTACTOR_CONTROL] ? !State : State);
 }
 //-----------------------------------
 

@@ -1,7 +1,6 @@
 ﻿#ifndef __DEV_OBJ_DIC_H
 #define __DEV_OBJ_DIC_H
 
-
 // ACTIONS
 //
 #define ACT_ENABLE_POWER						1		// Включить питание блока
@@ -16,7 +15,6 @@
 #define ACT_DBG_PULSE_PS_STOP					14		// Включение остановки зарядных устройств на 1сек.
 #define ACT_DBG_PULSE_CONTACTOR					15		// Включение контактора на 1сек.
 #define ACT_DBG_PULSE_EXT_LED					16		// Включение внешней индикации на 1сек.
-#define ACT_DBG_OPENING_SENSOR					17		//считывание состояния датчика размыкания
 //
 #define ACT_DBG_GENERATE_DAC_SETPOINT			20		// Формирование массива уставки для ЦАП
 #define ACT_DBG_DAC_PULSE						21		// Формирование импульса на ЦАП
@@ -31,7 +29,6 @@
 #define ACT_RESET_TO_DEFAULT					202		// Сброс DataTable в состояние по умолчанию
 //
 #define ACT_BOOT_LOADER_REQUEST					320		// Перезапуск процессора с целью перепрограммирования
-
 
 // REGISTERS
 //
@@ -64,6 +61,10 @@
 //
 #define REG_PP_KI								22		// Интегральный коэффициент импульсного регулятора х1000
 #define REG_W_DUT_K								23		// Пропорциональный коэффциент пересчета мощности х1000
+//
+// Регистры унификации прошивок
+#define REG_INVERT_CONTACTOR_CONTROL			30		// Использовать инверсию при управлении контактором (для ЭМ v.2.0, 2.1)
+
 // -----------------------------------------------
 
 #define REG_SET_PRE_PULSE_CURRENT				64		// Значение амплитуды предварительного импульса тока (в мА)
@@ -72,7 +73,6 @@
 #define REG_SET_PRE_PULSE_TIME					67		// Длительность предварительного импульса (в мкс)
 //
 #define REG_DIAG_DAC_PULSE						70		// Уставка ЦАП для диагностического импульса
-#define REG_OPENING_SEN							71		// Состояния датчика размыкания
 
 // -----------------------------------------------
 
@@ -91,13 +91,13 @@
 #define REG_CURRENT								111		// Измеренное значение амплитуды тока (в мА)
 #define REG_POWER								112		// Измеренное значение мощности (в Вт / 10)
 
+#define REG_OPENING_SEN							115		// Состояния датчика размыкания
+
 #define REG_FWINFO_SLAVE_NID					256		// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID					257		// Device CAN master node ID (if presented)
 // 258 - 259
 #define REG_FWINFO_STR_LEN						260		// Length of the information string record
 #define REG_FWINFO_STR_BEGIN					261		// Begining of the information string record
-
-// -----------------------------------------------
 
 // ENDPOINTS
 //
@@ -110,7 +110,6 @@
 #define EP_DIAG_DUT_IRSM						6		// Значения тока Irsm по пульсам (в мА)
 #define EP_DIAG_DUT_PRSM						7		// Значения мощности по пульсам (в Вт /10)
 #define EP_DIAG_DUT_R_STD						8		// СКО сопротивления нагрузки х100
-
 
 // FAULT & DISABLE
 //
@@ -135,6 +134,5 @@
 #define ERR_OPERATION_BLOCKED					2		// Операция не может быть выполнена в текущем состоянии устройства
 #define ERR_DEVICE_NOT_READY					3		// Устройство не готово для смены состояния
 #define ERR_WRONG_PWD							4		// Неправильный ключ
-
 
 #endif // __DEV_OBJ_DIC_H
