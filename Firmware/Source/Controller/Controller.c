@@ -41,6 +41,9 @@ volatile Int16U CONTROL_Values_DiagPrsm[PULSES_MAX];
 volatile Int16U CONTROL_Values_DiagRstd[PULSES_MAX];
 volatile Int16U CONTROL_Values_DiagEPCounter = 0;
 //
+volatile Int16U CONTROL_Values_DiagISetpointAmplitude[PULSES_MAX];
+volatile Int16U CONTROL_Values_DiagISetCounter = 0;
+//
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_TimeCounterDelay = 0;
 //
@@ -66,16 +69,23 @@ uint16_t CONTROL_HandleWarningCondition(ProcessResult Result);
 void CONTROL_Init()
 {
 	// Переменные для конфигурации EndPoint
-	Int16U EPIndexes[EP_COUNT] = { EP_DUT_V,  EP_DUT_I, EP_SETPOINT,
-								   EP_DIAG_DUT_VBR, EP_DIAG_DUT_VRSM, EP_DIAG_DUT_IRSM, EP_DIAG_DUT_PRSM, EP_DIAG_DUT_R_STD };
-	Int16U EPSized[EP_COUNT] = { VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE,
-								 PULSES_MAX, PULSES_MAX, PULSES_MAX, PULSES_MAX, PULSES_MAX };
-	pInt16U EPCounters[EP_COUNT] = { (pInt16U)&CONTROL_Values_ADCCounter, (pInt16U)&CONTROL_Values_ADCCounter, (pInt16U)&CONTROL_Values_SetCounter,
-									 (pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
-									 (pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter };
-	pInt16U EPDatas[EP_COUNT] = { (pInt16U)CONTROL_Values_DUTVoltage, (pInt16U)CONTROL_Values_DUTCurrent, (pInt16U)CONTROL_Values_Setpoint,
-								  (pInt16U)CONTROL_Values_DiagVbr, (pInt16U)CONTROL_Values_DiagVrsm,
-								  (pInt16U)CONTROL_Values_DiagIrsm, (pInt16U)CONTROL_Values_DiagPrsm, (pInt16U)CONTROL_Values_DiagRstd };
+	Int16U EPIndexes[EP_COUNT] = {EP_DUT_V, EP_DUT_I, EP_SETPOINT,
+			EP_DIAG_DUT_VBR, EP_DIAG_DUT_VRSM, EP_DIAG_DUT_IRSM,
+			EP_DIAG_DUT_PRSM, EP_DIAG_DUT_R_STD, EP_DIAG_I_SET};
+
+	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE,
+								 PULSES_MAX, PULSES_MAX, PULSES_MAX, PULSES_MAX, PULSES_MAX, PULSES_MAX};
+
+	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_Values_ADCCounter, (pInt16U)&CONTROL_Values_ADCCounter,
+			(pInt16U)&CONTROL_Values_SetCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
+			(pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
+			(pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
+			(pInt16U)&CONTROL_Values_DiagISetCounter};
+
+	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_Values_DUTVoltage, (pInt16U)CONTROL_Values_DUTCurrent,
+			(pInt16U)CONTROL_Values_Setpoint, (pInt16U)CONTROL_Values_DiagVbr, (pInt16U)CONTROL_Values_DiagVrsm,
+			(pInt16U)CONTROL_Values_DiagIrsm, (pInt16U)CONTROL_Values_DiagPrsm, (pInt16U)CONTROL_Values_DiagRstd,
+			(pInt16U)CONTROL_Values_DiagISetpointAmplitude};
 
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = { (FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT };
@@ -353,6 +363,14 @@ void CONTROL_SaveResultToEndpoints(ProcessResult Result)
 	CONTROL_Values_DiagPrsm[CONTROL_Values_DiagEPCounter] = (uint16_t)(Result.Prsm / 10);
 	CONTROL_Values_DiagRstd[CONTROL_Values_DiagEPCounter] = (uint16_t)(Result.Rstd * 100);
 	CONTROL_Values_DiagEPCounter++;
+}
+//-----------------------------------------------
+
+void CONTROL_SaveISetpointAmplitudeToEndpoint(float Setpoint)
+{
+	CONTROL_Values_DiagISetpointAmplitude[CONTROL_Values_DiagISetCounter] = (uint16_t)Setpoint;
+	if(CONTROL_Values_DiagISetCounter++ >= PULSES_MAX)
+		CONTROL_Values_DiagISetCounter = 0;
 }
 //-----------------------------------------------
 

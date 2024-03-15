@@ -49,6 +49,7 @@ extern volatile Int16U CONTROL_Values_ADCCounter;
 //
 void CONTROL_SetDeviceState(DeviceState NewState);
 void Delay_mS(uint32_t Delay);
+void CONTROL_SaveISetpointAmplitudeToEndpoint(float Setpoint);
 
 
 #endif // __CONTROLLER_H

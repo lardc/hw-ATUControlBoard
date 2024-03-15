@@ -84,9 +84,11 @@ void LOGIC_StartBatteryCharge()
 // Подготовка к формированию импульса
 void LOGIC_PrepareForPulse(float PrePulseCurrent, float PulseCurrent)
 {
+	CONTROL_SaveISetpointAmplitudeToEndpoint(PulseCurrent);
+
 	LOGIC_ClearDataArrays();
 	LOGIC_GeneratePulseForm(PrePulseCurrent, PulseCurrent);
-	//
+
 	LL_ExternalLED(TRUE);
 	LL_Contactor(TRUE);
 	LL_Demagnitization(TRUE);

@@ -114,6 +114,7 @@
 #define EP_DIAG_DUT_IRSM						6		// Значения тока Irsm по пульсам (в мА)
 #define EP_DIAG_DUT_PRSM						7		// Значения мощности по пульсам (в Вт /10)
 #define EP_DIAG_DUT_R_STD						8		// СКО сопротивления нагрузки х100
+#define EP_DIAG_I_SET							9		// Значеня амплитуды уставки тока (в мА)
 
 // FAULT & DISABLE
 //
