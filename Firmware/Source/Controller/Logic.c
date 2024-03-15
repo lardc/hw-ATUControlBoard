@@ -210,7 +210,7 @@ void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent)
 	// Заполнение основным импульсом
 	for (i = 0; i < CounterCurrent; ++i)
 	{
-		uint16_t PulseValue = (uint16_t)(ValDAC_Current * sin(PI_VALUE * i * DAC_TIME_STEP / PulseWidth) + DACBaseOffset);
+		uint16_t PulseValue = (uint16_t)(ValDAC_Current * sinf(M_PI * i * DAC_TIME_STEP / PulseWidth) + DACBaseOffset);
 
 		// Условие плавного сопряжения импульсов
 		if (PulseValue > LOGIC_OutputPulse[CounterPreCurrent + i])
@@ -267,7 +267,7 @@ ProcessResult LOGIC_ProcessOutputData()
 		// Максимальная скорость нарастания напряжения
 		if (i < (LOGIC_DataCounter - 1))
 		{
-			float tmp = fabs(LOGIC_DataArrays[i].Voltage - LOGIC_DataArrays[i + 1].Voltage);
+			float tmp = fabsf(LOGIC_DataArrays[i].Voltage - LOGIC_DataArrays[i + 1].Voltage);
 			if (tmp > Max_dVdt)
 				Max_dVdt = tmp;
 		}
@@ -279,9 +279,9 @@ ProcessResult LOGIC_ProcessOutputData()
 	{
 		// Нули отбрасываются
 		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
-			ResAvgSq += pow(LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current - ResAvg, 2);
+			ResAvgSq += powf(LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current - ResAvg, 2);
 	}
-	ResAvgSq = sqrt(ResAvgSq / ResAvgCounter);
+	ResAvgSq = sqrtf(ResAvgSq / ResAvgCounter);
 
 	// Получение напряжения лавинообразования
 	uint16_t TimeSyncShiftCounter = (uint16_t)((float)TimeSyncShift / DAC_TIME_STEP);

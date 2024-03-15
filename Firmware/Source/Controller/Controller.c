@@ -446,7 +446,7 @@ void CONTROL_HandlePulse()
 				float Perror = PowerTarget - Result.Prsm;
 
 				// В случае критического роста ошибки (неустойчивость регулирования) - остановка
-				if ((fabs(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
+				if ((fabsf(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
 					(CONTROL_PulsesRemain < (PULSES_MAX - 1)) && CONTROL_PowerRegulator)
 				{
 					CONTROL_SwitchToFault(DF_FOLLOWING_ERROR);
@@ -454,7 +454,7 @@ void CONTROL_HandlePulse()
 				else
 				{
 					// Проверка условий перехода к следующему шагу
-					if ((fabs(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
+					if ((fabsf(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
 						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
 					{
 						float Isetpoint, Ki;
@@ -472,7 +472,7 @@ void CONTROL_HandlePulse()
 
 						// Расчёт корректировки
 						if (Result.LoadR)
-							Isetpoint = Result.Irsm * sqrt(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
+							Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
 						else
 							Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
 
@@ -482,7 +482,7 @@ void CONTROL_HandlePulse()
 					{
 						// Регулятор не вышел на мощность
 						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE) &&
-							(fabs(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
+							(fabsf(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
 							Warning = WARNING_ACCURACY;
 
 						// Завершение работы
