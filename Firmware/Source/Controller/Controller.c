@@ -405,7 +405,8 @@ void CONTROL_HandlePulse()
 				float BatteryVoltage2 = MEASURE_BatteryVoltage2();
 				float VoltageThreshold = (float)DataTable[REG_VBAT_THRESHOLD];
 
-				if (BatteryVoltage1 >= VoltageThreshold && BatteryVoltage2 >= VoltageThreshold)
+				if (BatteryVoltage1 >= VoltageThreshold &&
+									(DataTable[REG_IGNORE_BATTERY2] || BatteryVoltage2 >= VoltageThreshold))
 				{
 					SUB_State = SS_PulsePrepStep2;
 					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_SW_RELEASE_TIME;
