@@ -43,7 +43,7 @@
 #define PP_KI_DEF					100		// reg 22
 //
 #define PRE_PULSE_CURR_MIN			50		// reg 64
-#define PRE_PULSE_CURR_MAX			300
+#define PRE_PULSE_CURR_MAX			400
 #define PRE_PULSE_CURR_DEF			100
 //
 #define PULSE_POW_MIN				200		// reg 65
@@ -55,7 +55,7 @@
 #define PULSE_CURRENT_DEF			500
 //
 #define PULSE_TIME_MIN				100		// reg 67
-#define PULSE_TIME_MAX				200
+#define PULSE_TIME_MAX				400
 #define PULSE_TIME_DEF				100
 //
 #define DIAG_DAC_MAX_PULSE			1000	// reg 70

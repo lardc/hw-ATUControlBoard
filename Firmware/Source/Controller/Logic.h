@@ -44,11 +44,11 @@ extern float TimePulseWidth;
 //
 void LOGIC_ResetHWToDefaults(bool StopPowerSupply);
 void LOGIC_StartBatteryCharge();
-void LOGIC_PrepareForPulse(float PrePulseCurrent, float PulseCurrent);
+void LOGIC_PrepareForPulse(float PulseCurrent);
 void LOGIC_StartPulse();
 bool LOGIC_IsPulseFinished();
 void LOGIC_PulseFinished();
-void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent);
+void LOGIC_GeneratePulseForm(float PulseCurrent);
 ProcessResult LOGIC_ProcessOutputData();
 void LOGIC_DiagPulseDAC();
 
