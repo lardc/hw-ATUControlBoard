@@ -5,7 +5,7 @@
 
 // Definitions
 //
-#define PULSE_ARR_MAX_LENGTH	1000
+#define PULSE_ARR_MAX_LENGTH	1300
 //
 typedef enum __HighSpeedState
 {
