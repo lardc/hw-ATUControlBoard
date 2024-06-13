@@ -37,8 +37,8 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] =
 	{PP_KI_MIN, PP_KI_MAX, PP_KI_DEF},				// 22
 	{0, INT16U_MAX, 1000},							// 23
 	{0, 0, 0},										// 24
-	{0, 0, 0},										// 25
-	{0, 0, 0},										// 26
+	{PRE_PULSE_CURR_MIN, PRE_PULSE_CURR_MAX, PRE_PULSE_CURR_DEF}, // 25
+	{PULSE_TIME_MIN, PULSE_TIME_MAX, PULSE_TIME_DEF},	// 26
 	{0, 0, 0},										// 27
 	{0, 0, 0},										// 28
 	{0, 0, 0},										// 29
@@ -80,10 +80,10 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] =
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] =
 {
-	{PRE_PULSE_CURR_MIN, PRE_PULSE_CURR_MAX, PRE_PULSE_CURR_DEF},		// 64
+	{0, INT16U_MAX, 0},								// 64
 	{PULSE_POW_MIN, PULSE_POW_MAX, PULSE_POW_DEF},	// 65
 	{PULSE_CURRENT_MIN, PULSE_CURRENT_MAX, PULSE_CURRENT_DEF},		// 66
-	{PULSE_TIME_MIN, PULSE_TIME_MAX, PULSE_TIME_DEF},	// 67
+	{0, INT16U_MAX, 0},								// 67
 	{0, 0, 0},										// 68
 	{0, 0, 0},										// 69
 	{0, DIAG_DAC_MAX_PULSE, 0},						// 70

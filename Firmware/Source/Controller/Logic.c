@@ -15,6 +15,7 @@
 #include "InitConfig.h"
 #include "Delay.h"
 #include "Measurement.h"
+#include "Constraints.h"
 
 // Types
 //
@@ -82,12 +83,12 @@ void LOGIC_StartBatteryCharge()
 //-------------------------------------------
 
 // Подготовка к формированию импульса
-void LOGIC_PrepareForPulse(float PrePulseCurrent, float PulseCurrent)
+void LOGIC_PrepareForPulse(float PulseCurrent)
 {
 	CONTROL_SaveISetpointAmplitudeToEndpoint(PulseCurrent);
 
 	LOGIC_ClearDataArrays();
-	LOGIC_GeneratePulseForm(PrePulseCurrent, PulseCurrent);
+	LOGIC_GeneratePulseForm(PulseCurrent);
 
 	LL_ExternalLED(TRUE);
 	LL_Contactor(TRUE);
@@ -100,7 +101,7 @@ void LOGIC_StartPulse()
 {
 	// Сохранение настраиваемых временных параметров
 	TimeOpAmpStabilize = DataTable[REG_OP_AMP_STAB_TIME];
-	TimePreCurrentPlate = DataTable[REG_SET_PRE_PULSE_TIME];
+	TimePreCurrentPlate = DataTable[REG_PRE_PULSE_TIME] ? DataTable[REG_PRE_PULSE_TIME] : PULSE_TIME_DEF;
 	TimeSyncShift = DataTable[REG_SYNC_SHIFT];
 	TimePulseWidth = (float)DataTable[REG_DAC_PULSE_WIDTH];
 
@@ -176,7 +177,7 @@ void LOGIC_ClearDataArrays()
 }
 //-------------------------------------------
 
-void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent)
+void LOGIC_GeneratePulseForm(float PulseCurrent)
 {
 	uint16_t i;
 
@@ -190,13 +191,15 @@ void LOGIC_GeneratePulseForm(float PrePulseCurrent, float PulseCurrent)
 	float PulseWidth = (float)DataTable[REG_DAC_PULSE_WIDTH];
 
 	// Рассчёт длительности в тиках для предварительного и основного импульса
-	CounterPreCurrent = (uint16_t)((float)DataTable[REG_SET_PRE_PULSE_TIME] / DAC_TIME_STEP);
+	float PrePulseTime = DataTable[REG_PRE_PULSE_TIME] ? DataTable[REG_PRE_PULSE_TIME] : PULSE_TIME_DEF;
+	CounterPreCurrent = (uint16_t)(PrePulseTime / DAC_TIME_STEP);
 	uint16_t CounterCurrent = (uint16_t)(PulseWidth / DAC_TIME_STEP);
 
 	// Рассчёт значений ЦАП для предварительного импульса и амплитуды основного
 	float CurrentToDAC_K = (float)DataTable[REG_I_TO_DAC_K] / 1000;
 	float CurrentToDAC_Offset = (float)((int16_t)DataTable[REG_I_TO_DAC_OFFSET]);
 	//
+	float PrePulseCurrent = DataTable[REG_PRE_PULSE_CURRENT] ? DataTable[REG_PRE_PULSE_CURRENT] : PRE_PULSE_CURR_DEF;
 	float ValDAC_PreCurrent = PrePulseCurrent * CurrentToDAC_K + CurrentToDAC_Offset;
 	float ValDAC_Current = PulseCurrent * CurrentToDAC_K + CurrentToDAC_Offset;
 

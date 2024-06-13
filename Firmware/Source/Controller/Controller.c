@@ -163,8 +163,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_PowerRegulator = FALSE;
 					CONTROL_PulsesRemain = 1;
 					//
-					LOGIC_PrepareForPulse((float)DataTable[REG_SET_PRE_PULSE_CURRENT],
-										  (float)DataTable[REG_SET_PULSE_CURRENT] * 2);
+					LOGIC_PrepareForPulse((float)DataTable[REG_SET_PULSE_CURRENT] * 2);
 					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
 					CONTROL_SetDeviceState(DS_InProcess);
 					SUB_State = SS_PulsePrepStep1;
@@ -185,8 +184,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					PowerTarget = (float)DataTable[REG_SET_PULSE_POWER] * 10;
 					PowerRegulatorErrKi = 0;
 					//
-					LOGIC_PrepareForPulse((float)DataTable[REG_SET_PRE_PULSE_CURRENT],
-										  PULSES_START_I);
+					LOGIC_PrepareForPulse(PULSES_START_I);
 					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
 					CONTROL_SetDeviceState(DS_InProcess);
 					SUB_State = SS_PulsePrepStep1;
@@ -288,8 +286,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				DEVPROFILE_ResetScopes(0);
 				DEVPROFILE_ResetEPReadState();
-				LOGIC_GeneratePulseForm((float)DataTable[REG_SET_PRE_PULSE_CURRENT],
-										(float)DataTable[REG_SET_PULSE_CURRENT] * 2);
+				LOGIC_GeneratePulseForm((float)DataTable[REG_SET_PULSE_CURRENT] * 2);
 			}
 			else
 				*pUserError = ERR_OPERATION_BLOCKED;
@@ -494,7 +491,7 @@ void CONTROL_HandlePulse()
 						else
 							Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
 
-						LOGIC_PrepareForPulse((float)DataTable[REG_SET_PRE_PULSE_CURRENT], Isetpoint);
+						LOGIC_PrepareForPulse(Isetpoint);
 					}
 					else
 					{
