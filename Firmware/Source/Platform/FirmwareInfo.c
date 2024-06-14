@@ -1,4 +1,4 @@
-// Header
+п»ї// Header
 #include "FirmwareInfo.h"
 
 // Includes
@@ -28,18 +28,18 @@ void FWINF_AppendString(pInt16U DataTable, const char *String, Int16U StringLen,
 {
 	Int16U i;
 
-	// Добавление строки
+	// Р”РѕР±Р°РІР»РµРЅРёРµ СЃС‚СЂРѕРєРё
 	for(i = 0; i < StringLen && *pCounter < MaxLength; i++)
 		FWINF_AppendSymbol(DataTable, String[i], (*pCounter)++);
 	if(*pCounter < MaxLength)
 	{
-		// Выравнивание размера данных
+		// Р’С‹СЂР°РІРЅРёРІР°РЅРёРµ СЂР°Р·РјРµСЂР° РґР°РЅРЅС‹С…
 		if(IsLastString)
 		{
 			if(*pCounter % 2)
 				FWINF_AppendSymbol(DataTable, ' ', (*pCounter)++);
 		}
-		// или добавление разделителя-запятой
+		// РёР»Рё РґРѕР±Р°РІР»РµРЅРёРµ СЂР°Р·РґРµР»РёС‚РµР»СЏ-Р·Р°РїСЏС‚РѕР№
 		else
 			FWINF_AppendSymbol(DataTable, ',', (*pCounter)++);
 	}
