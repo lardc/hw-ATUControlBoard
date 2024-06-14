@@ -63,6 +63,7 @@ void CONTROL_RegistersReset();
 void CONTROL_SaveResultToEndpoints(ProcessResult Result);
 void CONTROL_SaveResultToRegisters(ProcessResult Result);
 uint16_t CONTROL_HandleWarningCondition(ProcessResult Result);
+void CONTROL_InitDemagnetization();
 
 // Functions
 //
@@ -164,7 +165,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					CONTROL_PulsesRemain = 1;
 					//
 					LOGIC_PrepareForPulse((float)DataTable[REG_SET_PULSE_CURRENT] * 2);
-					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
+					CONTROL_InitDemagnetization();
 					CONTROL_SetDeviceState(DS_InProcess);
 					SUB_State = SS_PulsePrepStep1;
 				}
@@ -185,7 +186,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					PowerRegulatorErrKi = 0;
 					//
 					LOGIC_PrepareForPulse(PULSES_START_I);
-					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
+					CONTROL_InitDemagnetization();
 					CONTROL_SetDeviceState(DS_InProcess);
 					SUB_State = SS_PulsePrepStep1;
 				}
@@ -308,6 +309,12 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	}
 
 	return TRUE;
+}
+//-----------------------------------------------
+
+void CONTROL_InitDemagnetization()
+{
+	CONTROL_TimeCounterDelay = CONTROL_TimeCounter + (DataTable[REG_DEMAGNTZ_TIME] ? DataTable[REG_DEMAGNTZ_TIME] : TIME_DEMGNTZ);
 }
 //-----------------------------------------------
 
@@ -475,7 +482,7 @@ void CONTROL_HandlePulse()
 						float Isetpoint, Ki;
 
 						// Следующий шаг
-						CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_DEMGNTZ;
+						CONTROL_InitDemagnetization();
 						SUB_State = SS_PulsePrepStep1;
 
 						// Интегральная составляющая ошибки
