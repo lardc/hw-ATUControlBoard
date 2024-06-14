@@ -23,7 +23,7 @@ echo %branch_str% >> %file_output%
 set commit_var=static const char git_commit[] =
 
 for /f %%i in ('git rev-parse HEAD') do set git_commit=%%i
-set commit_str=%commit_var% %brace%%git_commit%%brace%%dot_comma%
+set commit_str=%commit_var% %brace%%git_commit:~0,7%%brace%%dot_comma%
 echo %commit_str% >> %file_output%
 
 set date_var=static const char git_date[] =
