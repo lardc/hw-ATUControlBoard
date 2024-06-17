@@ -39,6 +39,7 @@ set proj_str=%proj_var% %brace%%git_proj%%brace%%dot_comma%
 echo %proj_str% >> %file_output%
 
 (
+echo #define GIT_INF_USE_PROJ
 echo.
 echo #endif // __GIT_INFO_H
 ) >> %file_output%

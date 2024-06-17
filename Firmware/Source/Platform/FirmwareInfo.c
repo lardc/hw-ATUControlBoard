@@ -17,8 +17,12 @@ Int16U FWINF_Compose(pInt16U DataTable, Int16U MaxLength)
 
 	FWINF_AppendString(DataTable, git_commit,	strlen(git_commit),	&counter, MaxLength, false);
 	FWINF_AppendString(DataTable, git_date,		strlen(git_date),	&counter, MaxLength, false);
+#ifdef GIT_INF_USE_PROJ
 	FWINF_AppendString(DataTable, git_branch,	strlen(git_branch),	&counter, MaxLength, false);
 	FWINF_AppendString(DataTable, git_proj,		strlen(git_proj),	&counter, MaxLength, true);
+#else
+	FWINF_AppendString(DataTable, git_branch,	strlen(git_branch),	&counter, MaxLength, true);
+#endif
 
 	return counter;
 }
