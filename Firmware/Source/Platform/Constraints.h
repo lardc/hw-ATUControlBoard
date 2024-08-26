@@ -50,16 +50,23 @@
 #define PULSE_POW_MAX				8000
 #define PULSE_POW_DEF				1000
 //
-#define PULSE_CURRENT_MIN			250		// reg 66
-#define PULSE_CURRENT_MAX			22500
-#define PULSE_CURRENT_DEF			500
+// in mA (not mA/2)
+#define PULSE_CURRENT_MIN			500		// reg 66
+#define PULSE_CURRENT_MAX			45000
+#define PULSE_CURRENT_DEF			1000
 //
 #define PULSE_TIME_MIN				100		// reg 67
 #define PULSE_TIME_MAX				400
 #define PULSE_TIME_DEF				100
 //
 #define DIAG_DAC_MAX_PULSE			1000	// reg 70
-
+//
+// Redefine values
+// in A x10
+#define REDEF_CURRENT_MAX			700
+#define REDEF_RSTD_MAX				100
+#define REDEF_IDLEV_MAX				10000
+#define REDEF_POWER_MAX				PULSE_POW_MAX
 
 // Types
 //

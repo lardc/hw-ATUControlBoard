@@ -44,10 +44,10 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] =
 	{0, 0, 0},										// 29
 	{NO, YES, NO},									// 30
 	{NO, YES, NO},									// 31
-	{0, 100, 0},									// 32
-	{0, 10000, 0},									// 33
-	{0, PULSE_POW_MAX, 0},							// 34
-	{0, 0, 0},										// 35
+	{0, REDEF_RSTD_MAX, 0},							// 32
+	{0, REDEF_IDLEV_MAX, 0},						// 33
+	{0, REDEF_POWER_MAX, 0},						// 34
+	{0, REDEF_CURRENT_MAX, 0},						// 35
 	{0, 0, 0},										// 36
 	{0, 0, 0},										// 37
 	{0, 0, 0},										// 38
@@ -82,7 +82,7 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
 {
 	{0, INT16U_MAX, 0},								// 64
 	{PULSE_POW_MIN, PULSE_POW_MAX, PULSE_POW_DEF},	// 65
-	{PULSE_CURRENT_MIN, PULSE_CURRENT_MAX, PULSE_CURRENT_DEF},		// 66
+	{PULSE_CURRENT_MIN >> 1, PULSE_CURRENT_MAX >> 1, PULSE_CURRENT_DEF >> 1},	// 66
 	{0, INT16U_MAX, 0},								// 67
 	{0, 0, 0},										// 68
 	{0, 0, 0},										// 69
