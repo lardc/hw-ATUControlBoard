@@ -127,7 +127,6 @@
 #define DF_NONE									0
 #define DF_BATTERY								1		// Ошибка заряда батареи
 #define DF_BATTERY_P2P							2		// Ошибка заряда батареи между импульсами
-#define DF_FOLLOWING_ERROR						3		// Ошибка регулирования мощности
 
 // WARNINGS
 //
@@ -147,6 +146,7 @@
 #define PROBLEM_ACCURACY						3		// Погрешность полученной мощности велика
 #define PROBLEM_BREAK							4		// Пробой прибора
 #define PROBLEM_FACET_BREAK						5		// Пробой по фаске
+#define PROBLEM_FOLLOWING_ERROR					6		// Ошибка регулирования мощности
 
 // User Errors
 // 
