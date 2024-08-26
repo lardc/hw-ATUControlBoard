@@ -475,8 +475,6 @@ void CONTROL_HandlePulse()
 				// Для первого импульса в случае КЗ делается ещё одна попытка с бОльшим током
 				if((Problem == PROBLEM_SHORT) && (CONTROL_PulsesRemain == PULSES_MAX - 1))
 				{
-					Problem = PROBLEM_NONE;
-
 					// Запуск следующего цикла с повышенным током и пропуском одного шага регулирования
 					CONTROL_InitDemagnetization();
 					SUB_State = SS_PulsePrepStep1;
