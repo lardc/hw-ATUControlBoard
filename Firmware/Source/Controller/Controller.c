@@ -457,62 +457,62 @@ void CONTROL_HandlePulse()
 				float Perror = PowerTarget - Result.Prsm;
 
 				// В случае критического роста ошибки (неустойчивость регулирования) - остановка
-				if((fabsf(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
-					(CONTROL_PulsesRemain < (PULSES_MAX - 1)) && CONTROL_PowerRegulator)
+				if((Problem == PROBLEM_NONE) && (fabsf(Perror) > PowerTarget * PULSES_POWER_ERR_STOP) &&
+					(CONTROL_PulsesRemain < PULSES_MAX - 1) && CONTROL_PowerRegulator)
 				{
-					CONTROL_SwitchToFault(DF_FOLLOWING_ERROR);
+					Problem = PROBLEM_FOLLOWING_ERROR;
 				}
+
+				// Регулятор не вышел на мощность
+				if((Problem == PROBLEM_NONE) && (CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator &&
+					(fabsf(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
+				{
+					Problem = PROBLEM_ACCURACY;
+				}
+
+				// Условие перехода к следующему шагу
+				if((Problem == PROBLEM_NONE) && (CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator &&
+						(fabsf(Perror) > PowerTarget * PULSES_POWER_REGULATOR_ERR))
+				{
+					float Isetpoint, Ki;
+
+					// Следующий шаг
+					CONTROL_InitDemagnetization();
+					SUB_State = SS_PulsePrepStep1;
+
+					// Интегральная составляющая ошибки
+					Ki = (float)DataTable[REG_PP_KI] / 1000;
+
+					// Для первого импульса ошибка не учитывается
+					if(CONTROL_PulsesRemain < (PULSES_MAX - 1))
+						PowerRegulatorErrKi += Perror * Ki;
+
+					// Расчёт корректировки
+					if(Result.LoadR)
+						Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
+					else
+						Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
+
+					LOGIC_PrepareForPulse(Isetpoint);
+				}
+				// Условие остановки
 				else
 				{
-					// Проверка условий перехода к следующему шагу
-					if((fabsf(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
-						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE))
+					SUB_State = SS_None;
+					CONTROL_SetDeviceState(DS_Ready);
+					LL_ExternalLED(FALSE);
+					LL_Contactor(FALSE);
+
+					// Сохранение результата
+					if(Problem == PROBLEM_NONE)
 					{
-						float Isetpoint, Ki;
-
-						// Следующий шаг
-						CONTROL_InitDemagnetization();
-						SUB_State = SS_PulsePrepStep1;
-
-						// Интегральная составляющая ошибки
-						Ki = (float)DataTable[REG_PP_KI] / 1000;
-
-						// Для первого импульса ошибка не учитывается
-						if(CONTROL_PulsesRemain < (PULSES_MAX - 1))
-							PowerRegulatorErrKi += Perror * Ki;
-
-						// Расчёт корректировки
-						if(Result.LoadR)
-							Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
-						else
-							Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
-
-						LOGIC_PrepareForPulse(Isetpoint);
+						CONTROL_SaveResultToRegisters(Result);
+						DataTable[REG_FINISHED] = OPRESULT_OK;
 					}
 					else
 					{
-						// Регулятор не вышел на мощность
-						if((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE) &&
-							(fabsf(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
-							Problem = PROBLEM_ACCURACY;
-
-						// Завершение работы
-						SUB_State = SS_None;
-						CONTROL_SetDeviceState(DS_Ready);
-						LL_ExternalLED(FALSE);
-						LL_Contactor(FALSE);
-
-						// Сохранение результата
-						if(Problem == PROBLEM_NONE)
-						{
-							CONTROL_SaveResultToRegisters(Result);
-							DataTable[REG_FINISHED] = OPRESULT_OK;
-						}
-						else
-						{
-							DataTable[REG_PROBLEM] = Problem;
-							DataTable[REG_FINISHED] = OPRESULT_FAIL;
-						}
+						DataTable[REG_PROBLEM] = Problem;
+						DataTable[REG_FINISHED] = OPRESULT_FAIL;
 					}
 				}
 			}
