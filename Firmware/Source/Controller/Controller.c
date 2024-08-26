@@ -124,10 +124,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	switch (ActionID)
 	{
 		case ACT_CLR_FAULT:
-			{
-				if (CONTROL_State == DS_Fault)
-					CONTROL_ResetToDefaults(TRUE);
-			}
+			if(CONTROL_State == DS_Fault)
+				CONTROL_ResetToDefaults(TRUE);
 			break;
 
 		case ACT_CLR_WARNING:
@@ -135,78 +133,68 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_ENABLE_POWER:
+			if(CONTROL_State == DS_None)
 			{
-				if (CONTROL_State == DS_None)
-				{
-					LOGIC_StartBatteryCharge();
-					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + BAT_CHARGE_TIMEOUT;
-					CONTROL_SetDeviceState(DS_BatteryCharge);
-					SUB_State = SS_Charge;
-				}
-				else if (CONTROL_State != DS_Ready)
-					*pUserError = ERR_OPERATION_BLOCKED;
+				LOGIC_StartBatteryCharge();
+				CONTROL_TimeCounterDelay = CONTROL_TimeCounter + BAT_CHARGE_TIMEOUT;
+				CONTROL_SetDeviceState(DS_BatteryCharge);
+				SUB_State = SS_Charge;
 			}
+			else if(CONTROL_State != DS_Ready)
+				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 
 		case ACT_DISABLE_POWER:
-			{
-				if (CONTROL_State != DS_Disabled)
-					CONTROL_ResetToDefaults(TRUE);
-			}
+			if(CONTROL_State != DS_Disabled)
+				CONTROL_ResetToDefaults(TRUE);
 			break;
 
 		case ACT_SINGLE_PULSE:
+			if(CONTROL_State == DS_Ready)
 			{
-				if (CONTROL_State == DS_Ready)
-				{
-					CONTROL_RegistersReset();
-					//
-					CONTROL_PowerRegulator = FALSE;
-					CONTROL_PulsesRemain = 1;
-					//
-					LOGIC_PrepareForPulse((float)DataTable[REG_SET_PULSE_CURRENT] * 2);
-					CONTROL_InitDemagnetization();
-					CONTROL_SetDeviceState(DS_InProcess);
-					SUB_State = SS_PulsePrepStep1;
-				}
-				else
-					*pUserError = ERR_DEVICE_NOT_READY;
+				CONTROL_RegistersReset();
+				//
+				CONTROL_PowerRegulator = FALSE;
+				CONTROL_PulsesRemain = 1;
+				//
+				LOGIC_PrepareForPulse((float)DataTable[REG_SET_PULSE_CURRENT] * 2);
+				CONTROL_InitDemagnetization();
+				CONTROL_SetDeviceState(DS_InProcess);
+				SUB_State = SS_PulsePrepStep1;
 			}
+			else
+				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 
 		case ACT_START_TEST:
+			if(CONTROL_State == DS_Ready)
 			{
-				if (CONTROL_State == DS_Ready)
-				{
-					CONTROL_RegistersReset();
-					//
-					CONTROL_PowerRegulator = TRUE;
-					CONTROL_PulsesRemain = PULSES_MAX;
-					PowerTarget = (float)DataTable[REG_SET_PULSE_POWER] * 10;
-					PowerRegulatorErrKi = 0;
-					//
-					LOGIC_PrepareForPulse(PULSES_START_I);
-					CONTROL_InitDemagnetization();
-					CONTROL_SetDeviceState(DS_InProcess);
-					SUB_State = SS_PulsePrepStep1;
-				}
-				else
-					*pUserError = ERR_DEVICE_NOT_READY;
+				CONTROL_RegistersReset();
+				//
+				CONTROL_PowerRegulator = TRUE;
+				CONTROL_PulsesRemain = PULSES_MAX;
+				PowerTarget = (float)DataTable[REG_SET_PULSE_POWER] * 10;
+				PowerRegulatorErrKi = 0;
+				//
+				LOGIC_PrepareForPulse(PULSES_START_I);
+				CONTROL_InitDemagnetization();
+				CONTROL_SetDeviceState(DS_InProcess);
+				SUB_State = SS_PulsePrepStep1;
 			}
+			else
+				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 
 		case ACT_STOP_TEST:
+			if(CONTROL_State == DS_InProcess)
 			{
-				if (CONTROL_State == DS_InProcess)
-				{
-					CONTROL_ResetToDefaults(FALSE);
-					CONTROL_SetDeviceState(DS_Ready);
-				}
+				CONTROL_ResetToDefaults(FALSE);
+				CONTROL_SetDeviceState(DS_Ready);
 			}
 			break;
 
 		case ACT_DBG_PULSE_DEMAGNET_SW:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_Demagnitization(TRUE);
 				Delay_mS(1000);
@@ -217,7 +205,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_SYNC:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_ExternalSync(TRUE);
 				Delay_mS(1000);
@@ -228,7 +216,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_DSCHRG_SW:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_Discharge(TRUE);
 				Delay_mS(1000);
@@ -239,7 +227,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_PS_SW:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_PowerOn(TRUE);
 				Delay_mS(1000);
@@ -250,7 +238,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_CONTACTOR:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_Contactor(TRUE);
 				Delay_mS(1000);
@@ -261,7 +249,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_PS_STOP:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_PowerSupplyStop(TRUE);
 				Delay_mS(1000);
@@ -272,7 +260,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_PULSE_EXT_LED:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				LL_ExternalLED(TRUE);
 				Delay_mS(1000);
@@ -283,7 +271,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_GENERATE_DAC_SETPOINT:
-			if (CONTROL_State == DS_None)
+			if(CONTROL_State == DS_None)
 			{
 				DEVPROFILE_ResetScopes(0);
 				DEVPROFILE_ResetEPReadState();
@@ -294,7 +282,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_DBG_DAC_PULSE:
-			if (CONTROL_State == DS_Ready)
+			if(CONTROL_State == DS_Ready)
 				LOGIC_DiagPulseDAC();
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
@@ -321,7 +309,7 @@ void CONTROL_InitDemagnetization()
 void CONTROL_HandleBatteryCharge()
 {
 	// Мониторинг уровня заряда батареи
-	if (SUB_State == SS_Charge || SUB_State == SS_None || SUB_State == SS_PulsePrepCheckV)
+	if(SUB_State == SS_Charge || SUB_State == SS_None || SUB_State == SS_PulsePrepCheckV)
 	{
 		float BatteryVoltage1 = MEASURE_BatteryVoltage1();
 		float BatteryVoltage2 = MEASURE_BatteryVoltage2();
@@ -331,27 +319,27 @@ void CONTROL_HandleBatteryCharge()
 		DataTable[REG_BAT2_VOLTAGE] = (uint16_t)(BatteryVoltage2 * 10);
 
 		// Переключение состояния в случае заряда
-		if (SUB_State == SS_Charge)
+		if(SUB_State == SS_Charge)
 		{
-			if (BatteryVoltage1 >= VoltageThreshold &&
+			if(BatteryVoltage1 >= VoltageThreshold &&
 					(DataTable[REG_IGNORE_BATTERY2] || BatteryVoltage2 >= VoltageThreshold))
 			{
 				SUB_State = SS_None;
 				CONTROL_SetDeviceState(DS_Ready);
 			}
-			else if (CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
+			else if(CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
 				CONTROL_SwitchToFault(DF_BATTERY);
 		}
 
 		// Поддержание уровня заряда
-		if ((CONTROL_State == DS_Ready) ||
+		if((CONTROL_State == DS_Ready) ||
 			(CONTROL_State == DS_InProcess && SUB_State == SS_PulsePrepCheckV))
 		{
-			if (BatteryVoltage1 >= (VoltageThreshold + BAT_VOLTAGE_DELTA) &&
+			if(BatteryVoltage1 >= (VoltageThreshold + BAT_VOLTAGE_DELTA) &&
 				(DataTable[REG_IGNORE_BATTERY2] || BatteryVoltage2 >= (VoltageThreshold + BAT_VOLTAGE_DELTA)))
 				LL_PowerSupplyStop(TRUE);
 
-			if (BatteryVoltage1 < VoltageThreshold ||
+			if(BatteryVoltage1 < VoltageThreshold ||
 				(!DataTable[REG_IGNORE_BATTERY2] && BatteryVoltage2 < VoltageThreshold))
 				LL_PowerSupplyStop(FALSE);
 		}
@@ -412,7 +400,7 @@ void CONTROL_HandlePulse()
 			break;
 
 		case SS_PulsePrepStep1:
-			if (CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
+			if(CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
 			{
 				// Окончание размагничивания
 				LL_Demagnitization(FALSE);
@@ -428,19 +416,19 @@ void CONTROL_HandlePulse()
 				float BatteryVoltage2 = MEASURE_BatteryVoltage2();
 				float VoltageThreshold = (float)DataTable[REG_VBAT_THRESHOLD];
 
-				if (BatteryVoltage1 >= VoltageThreshold &&
+				if(BatteryVoltage1 >= VoltageThreshold &&
 									(DataTable[REG_IGNORE_BATTERY2] || BatteryVoltage2 >= VoltageThreshold))
 				{
 					SUB_State = SS_PulsePrepStep2;
 					CONTROL_TimeCounterDelay = CONTROL_TimeCounter + TIME_SW_RELEASE_TIME;
 				}
-				else if (CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
+				else if(CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
 					CONTROL_SwitchToFault(DF_BATTERY_P2P);
 			}
 			break;
 
 		case SS_PulsePrepStep2:
-			if (CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
+			if(CONTROL_TimeCounterDelay < CONTROL_TimeCounter)
 			{
 				LOGIC_StartPulse();
 				SUB_State = SS_PulseFinishWait;
@@ -448,12 +436,12 @@ void CONTROL_HandlePulse()
 			break;
 
 		case SS_PulseFinishWait:
-			if (LOGIC_IsPulseFinished())
+			if(LOGIC_IsPulseFinished())
 			{
 				ProcessResult Result;
 
 				// Уменьшение счётчика
-				if (CONTROL_PulsesRemain)
+				if(CONTROL_PulsesRemain)
 					CONTROL_PulsesRemain--;
 				DataTable[REG_COUNTER_MEASURE] = PULSES_MAX - CONTROL_PulsesRemain;
 
@@ -469,7 +457,7 @@ void CONTROL_HandlePulse()
 				float Perror = PowerTarget - Result.Prsm;
 
 				// В случае критического роста ошибки (неустойчивость регулирования) - остановка
-				if ((fabsf(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
+				if((fabsf(Perror) > (PowerTarget * PULSES_POWER_ERR_STOP)) &&
 					(CONTROL_PulsesRemain < (PULSES_MAX - 1)) && CONTROL_PowerRegulator)
 				{
 					CONTROL_SwitchToFault(DF_FOLLOWING_ERROR);
@@ -477,7 +465,7 @@ void CONTROL_HandlePulse()
 				else
 				{
 					// Проверка условий перехода к следующему шагу
-					if ((fabsf(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
+					if((fabsf(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
 						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE))
 					{
 						float Isetpoint, Ki;
@@ -490,11 +478,11 @@ void CONTROL_HandlePulse()
 						Ki = (float)DataTable[REG_PP_KI] / 1000;
 
 						// Для первого импульса ошибка не учитывается
-						if (CONTROL_PulsesRemain < (PULSES_MAX - 1))
+						if(CONTROL_PulsesRemain < (PULSES_MAX - 1))
 							PowerRegulatorErrKi += Perror * Ki;
 
 						// Расчёт корректировки
-						if (Result.LoadR)
+						if(Result.LoadR)
 							Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
 						else
 							Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
@@ -504,7 +492,7 @@ void CONTROL_HandlePulse()
 					else
 					{
 						// Регулятор не вышел на мощность
-						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE) &&
+						if((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE) &&
 							(fabsf(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
 							Problem = PROBLEM_ACCURACY;
 
@@ -536,9 +524,9 @@ void CONTROL_HandlePulse()
 uint16_t CONTROL_HandleProblemCondition(ProcessResult Result)
 {
 	float IdleV = DataTable[REG_REDEFINE_IDLE_V] ? DataTable[REG_REDEFINE_IDLE_V] : MEAS_BREAK_IDLE_V;
-	if (Result.Vmax > IdleV && Result.Vbr > IdleV)
+	if(Result.Vmax > IdleV && Result.Vbr > IdleV)
 		return PROBLEM_IDLE;
-	else if (Result.Vmax < MEAS_BREAK_SHORT_V && Result.Vbr < MEAS_BREAK_SHORT_V)
+	else if(Result.Vmax < MEAS_BREAK_SHORT_V && Result.Vbr < MEAS_BREAK_SHORT_V)
 		return PROBLEM_SHORT;
 	else
 		return PROBLEM_NONE;
@@ -589,7 +577,7 @@ void Delay_mS(uint32_t Delay)
 
 void CONTROL_WatchDogUpdate()
 {
-	if (BOOT_LOADER_VARIABLE != BOOT_LOADER_REQUEST)
+	if(BOOT_LOADER_VARIABLE != BOOT_LOADER_REQUEST)
 		IWDG_Refresh();
 }
 //-----------------------------------------------
