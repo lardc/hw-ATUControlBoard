@@ -62,7 +62,7 @@ void CONTROL_WatchDogUpdate();
 void CONTROL_RegistersReset();
 void CONTROL_SaveResultToEndpoints(ProcessResult Result);
 void CONTROL_SaveResultToRegisters(ProcessResult Result);
-uint16_t CONTROL_HandleWarningCondition(ProcessResult Result);
+uint16_t CONTROL_HandleProblemCondition(ProcessResult Result);
 void CONTROL_InitDemagnetization();
 
 // Functions
@@ -112,7 +112,7 @@ void CONTROL_ResetToDefaults(bool StopPowerSupply)
 	SUB_State = SS_None;
 	CONTROL_SetDeviceState(DS_None);
 
-	DataTable[REG_FAULT_REASON] = 0;
+	DataTable[REG_FAULT_REASON] = DF_NONE;
 	CONTROL_RegistersReset();
 }
 //------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_CLR_WARNING:
-			DataTable[REG_WARNING] = 0;
+			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
 
 		case ACT_ENABLE_POWER:
@@ -394,8 +394,9 @@ void CONTROL_RegistersReset()
 	DataTable[REG_CURRENT] = 0;
 	DataTable[REG_POWER] = 0;
 
-	DataTable[REG_WARNING] = 0;
-	DataTable[REG_PROBLEM] = 0;
+	DataTable[REG_WARNING] = WARNING_NONE;
+	DataTable[REG_PROBLEM] = PROBLEM_NONE;
+	DataTable[REG_FINISHED] = OPRESULT_NONE;
 
 	DEVPROFILE_ResetScopes(0);
 	DEVPROFILE_ResetEPReadState();
@@ -462,7 +463,7 @@ void CONTROL_HandlePulse()
 				CONTROL_SaveResultToEndpoints(Result);
 
 				// Проверка условий остановки
-				uint16_t Warning = CONTROL_HandleWarningCondition(Result);
+				uint16_t Problem = CONTROL_HandleProblemCondition(Result);
 
 				// Ошибка по мощности
 				float Perror = PowerTarget - Result.Prsm;
@@ -477,7 +478,7 @@ void CONTROL_HandlePulse()
 				{
 					// Проверка условий перехода к следующему шагу
 					if ((fabsf(Perror) > (PowerTarget * PULSES_POWER_REGULATOR_ERR)) &&
-						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE))
+						(CONTROL_PulsesRemain > 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE))
 					{
 						float Isetpoint, Ki;
 
@@ -503,36 +504,44 @@ void CONTROL_HandlePulse()
 					else
 					{
 						// Регулятор не вышел на мощность
-						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Warning == WARNING_NONE) &&
+						if ((CONTROL_PulsesRemain == 0) && CONTROL_PowerRegulator && (Problem == PROBLEM_NONE) &&
 							(fabsf(Perror) > (PowerTarget * PULSES_POWER_MAX_ERR)))
-							Warning = WARNING_ACCURACY;
+							Problem = PROBLEM_ACCURACY;
 
 						// Завершение работы
 						SUB_State = SS_None;
 						CONTROL_SetDeviceState(DS_Ready);
-						CONTROL_SaveResultToRegisters(Result);
-						DataTable[REG_WARNING] = Warning;
-
 						LL_ExternalLED(FALSE);
 						LL_Contactor(FALSE);
+
+						// Сохранение результата
+						if(Problem == PROBLEM_NONE)
+						{
+							CONTROL_SaveResultToRegisters(Result);
+							DataTable[REG_FINISHED] = OPRESULT_OK;
+						}
+						else
+						{
+							DataTable[REG_PROBLEM] = Problem;
+							DataTable[REG_FINISHED] = OPRESULT_FAIL;
+						}
 					}
 				}
 			}
 			break;
 	}
-
 }
 //-----------------------------------------------
 
-uint16_t CONTROL_HandleWarningCondition(ProcessResult Result)
+uint16_t CONTROL_HandleProblemCondition(ProcessResult Result)
 {
 	float IdleV = DataTable[REG_REDEFINE_IDLE_V] ? DataTable[REG_REDEFINE_IDLE_V] : MEAS_BREAK_IDLE_V;
 	if (Result.Vmax > IdleV && Result.Vbr > IdleV)
-		return WARNING_IDLE;
+		return PROBLEM_IDLE;
 	else if (Result.Vmax < MEAS_BREAK_SHORT_V && Result.Vbr < MEAS_BREAK_SHORT_V)
-		return WARNING_SHORT;
+		return PROBLEM_SHORT;
 	else
-		return WARNING_NONE;
+		return PROBLEM_NONE;
 }
 //-----------------------------------------------
 

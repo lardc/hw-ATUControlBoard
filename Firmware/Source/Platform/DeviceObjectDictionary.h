@@ -90,6 +90,7 @@
 #define REG_DISABLE_REASON						98		// Причина отключения блока
 #define REG_WARNING								99		// Предупреждение
 #define REG_PROBLEM								100		// Регистр Problem
+#define REG_FINISHED							101		// Регистр окончания измерения
 //
 #define REG_BAT1_VOLTAGE						103		// Напряжение на конденсаторной батарее 1 (в В х10)
 #define REG_BAT2_VOLTAGE						104		// Напряжение на конденсаторной батарее 2 (в В х10)
@@ -131,11 +132,21 @@
 // WARNINGS
 //
 #define WARNING_NONE							0
-#define WARNING_IDLE							1		// ХХ на выходе
-#define WARNING_SHORT							2		// КЗ на выходе
-#define WARNING_ACCURACY						3		// Погрешность полученной мощности велика
-#define WARNING_BREAK							4		// Пробой прибора
-#define WARNING_FACET_BREAK						5		// Пробой по фаске
+
+// OPRESULT
+//
+#define OPRESULT_NONE							0		// No information or not finished
+#define OPRESULT_OK								1		// Operation was successful
+#define OPRESULT_FAIL							2		// Operation failed
+
+// PROBLEMS
+//
+#define PROBLEM_NONE							0
+#define PROBLEM_IDLE							1		// ХХ на выходе
+#define PROBLEM_SHORT							2		// КЗ на выходе
+#define PROBLEM_ACCURACY						3		// Погрешность полученной мощности велика
+#define PROBLEM_BREAK							4		// Пробой прибора
+#define PROBLEM_FACET_BREAK						5		// Пробой по фаске
 
 // User Errors
 // 
