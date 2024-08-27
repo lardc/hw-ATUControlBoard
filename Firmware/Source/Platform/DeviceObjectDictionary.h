@@ -30,6 +30,12 @@
 //
 #define ACT_BOOT_LOADER_REQUEST					320		// Перезапуск процессора с целью перепрограммирования
 
+#define ACT_FLASH_DIAG_READ_SYMBOL				330		// Выполнить чтение символа из памяти отладочной информации
+#define ACT_FLASH_DIAG_INIT_READ				331		// Инициализировать начало считывания отладочной информации
+
+#define ACT_FLASH_DIAG_SAVE						332		// Сохранение блока отладочной информации во флэш
+#define ACT_FLASH_DIAG_ERASE					333		// Стирание области отладочной информации
+
 // REGISTERS
 //
 #define REG_I_TO_DAC_OFFSET						0		// Пересчёт уставки по току в значения ЦАП смещение (в тиках)
@@ -66,12 +72,15 @@
 #define REG_PRE_PULSE_TIME						26		// Длительность предварительного импульса (в мкс)
 #define REG_DEMAGNTZ_TIME						27		// Переопределить время на размагничивание (в мс)
 //
+#define REG_SAVE_TO_FLASH_MASK					29		// Битовая маска для сохранения во флэш по Problem
+//
 // Регистры унификации прошивок
 #define REG_INVERT_CONTACTOR_CONTROL			30		// Использовать инверсию при управлении контактором (для ЭМ v.2.0, 2.1)
 #define REG_IGNORE_BATTERY2						31		// Игнорировать параметры заряда батареи 2 (для маломощной конфигурации)
 #define REG_REDEFINE_R_STDEV					32		// Переопределить значение для СКО сопротивления резистора х10 (от 0,1 до 10), 0 - не менять
 #define REG_REDEFINE_IDLE_V						33		// Переопределить напряжение для ХХ (в В)
 #define REG_REDEFINE_MAX_POWER					34		// Переопределить максимальную мощность (в Вт /10)
+#define REG_REDEFINE_MAX_CURRENT				35		// Переопределить максимальный ток (в А х10)
 
 // -----------------------------------------------
 
@@ -89,6 +98,7 @@
 #define REG_DISABLE_REASON						98		// Причина отключения блока
 #define REG_WARNING								99		// Предупреждение
 #define REG_PROBLEM								100		// Регистр Problem
+#define REG_FINISHED							101		// Регистр окончания измерения
 //
 #define REG_BAT1_VOLTAGE						103		// Напряжение на конденсаторной батарее 1 (в В х10)
 #define REG_BAT2_VOLTAGE						104		// Напряжение на конденсаторной батарее 2 (в В х10)
@@ -103,9 +113,11 @@
 
 #define REG_FWINFO_SLAVE_NID					256		// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID					257		// Device CAN master node ID (if presented)
-// 258 - 259
+
 #define REG_FWINFO_STR_LEN						260		// Length of the information string record
 #define REG_FWINFO_STR_BEGIN					261		// Begining of the information string record
+
+#define REG_MEM_SYMBOL							299		// Считанный по адресу памяти символ
 
 // ENDPOINTS
 //
@@ -125,16 +137,26 @@
 #define DF_NONE									0
 #define DF_BATTERY								1		// Ошибка заряда батареи
 #define DF_BATTERY_P2P							2		// Ошибка заряда батареи между импульсами
-#define DF_FOLLOWING_ERROR						3		// Ошибка регулирования мощности
 
 // WARNINGS
 //
 #define WARNING_NONE							0
-#define WARNING_IDLE							1		// ХХ на выходе
-#define WARNING_SHORT							2		// КЗ на выходе
-#define WARNING_ACCURACY						3		// Погрешность полученной мощности велика
-#define WARNING_BREAK							4		// Пробой прибора
-#define WARNING_FACET_BREAK						5		// Пробой по фаске
+
+// OPRESULT
+//
+#define OPRESULT_NONE							0		// No information or not finished
+#define OPRESULT_OK								1		// Operation was successful
+#define OPRESULT_FAIL							2		// Operation failed
+
+// PROBLEMS
+//
+#define PROBLEM_NONE							0
+#define PROBLEM_IDLE							1		// ХХ на выходе
+#define PROBLEM_SHORT							2		// КЗ на выходе
+#define PROBLEM_ACCURACY						3		// Погрешность полученной мощности велика
+#define PROBLEM_BREAK							4		// Пробой прибора
+#define PROBLEM_FACET_BREAK						5		// Пробой по фаске
+#define PROBLEM_FOLLOWING_ERROR					6		// Ошибка регулирования мощности
 
 // User Errors
 // 

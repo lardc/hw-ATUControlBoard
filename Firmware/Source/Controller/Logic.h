@@ -51,5 +51,6 @@ void LOGIC_PulseFinished();
 void LOGIC_GeneratePulseForm(float PulseCurrent);
 ProcessResult LOGIC_ProcessOutputData();
 void LOGIC_DiagPulseDAC();
+float LOGIC_SavedCurrentSetpoint();
 
 #endif //__LOGIC_H
