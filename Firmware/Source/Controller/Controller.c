@@ -533,8 +533,12 @@ void CONTROL_HandlePulse()
 						DataTable[REG_PROBLEM] = Problem;
 						DataTable[REG_FINISHED] = OPRESULT_FAIL;
 
+						// Сохранение отладочной информации
 						if(DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem))
+						{
+							IWDG_Refresh();
 							STF_SaveDiagData();
+						}
 					}
 				}
 			}
