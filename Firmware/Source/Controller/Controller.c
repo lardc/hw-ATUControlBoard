@@ -393,7 +393,7 @@ void CONTROL_RegistersReset()
 
 void CONTROL_HandlePulse()
 {
-	static bool MuteNextRegulator = false;
+	static bool SkipRegulation = false;
 
 	switch (SUB_State)
 	{
@@ -447,6 +447,10 @@ void CONTROL_HandlePulse()
 					CONTROL_PulsesRemain--;
 				DataTable[REG_COUNTER_MEASURE] = PULSES_MAX - CONTROL_PulsesRemain;
 
+				// Пропуск регулирования для первого или одиночного импульса
+				if(CONTROL_PulsesRemain == 0 || CONTROL_PulsesRemain == PULSES_MAX - 1)
+					SkipRegulation = true;
+
 				// Обработка результатов
 				LOGIC_PulseFinished();
 				Result = LOGIC_ProcessOutputData();
@@ -460,7 +464,7 @@ void CONTROL_HandlePulse()
 
 				// В случае критического роста ошибки (неустойчивость регулирования) - остановка
 				if((Problem == PROBLEM_NONE) && (fabsf(Perror) > PowerTarget * PULSES_POWER_ERR_STOP) &&
-					(CONTROL_PulsesRemain < PULSES_MAX - 1) && CONTROL_PowerRegulator)
+					!SkipRegulation && CONTROL_PowerRegulator)
 				{
 					Problem = PROBLEM_FOLLOWING_ERROR;
 				}
@@ -475,11 +479,9 @@ void CONTROL_HandlePulse()
 				// Для первого импульса в случае КЗ делается ещё одна попытка с бОльшим током
 				if((Problem == PROBLEM_SHORT) && (CONTROL_PulsesRemain == PULSES_MAX - 1))
 				{
-					// Запуск следующего цикла с повышенным током и пропуском одного шага регулирования
+					// Новая итерация с повышенным стартовым током
 					CONTROL_InitDemagnetization();
 					SUB_State = SS_PulsePrepStep1;
-					MuteNextRegulator = true;
-
 					LOGIC_PrepareForPulse(PULSES_START_I_SECOND);
 					break;
 				}
@@ -497,17 +499,16 @@ void CONTROL_HandlePulse()
 					Ki = (float)DataTable[REG_PP_KI] / 1000;
 
 					// Для первого импульса ошибка не учитывается
-					if((CONTROL_PulsesRemain < PULSES_MAX - 1) && !MuteNextRegulator)
+					if(!SkipRegulation)
 						PowerRegulatorErrKi += Perror * Ki;
+					SkipRegulation = false;
 
 					// Расчёт корректировки
 					if(Result.LoadR)
 						Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
 					else
 						Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
-
 					LOGIC_PrepareForPulse(Isetpoint);
-					MuteNextRegulator = false;
 				}
 				// Условие остановки
 				else
