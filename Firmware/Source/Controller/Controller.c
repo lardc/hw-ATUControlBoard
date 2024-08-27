@@ -624,5 +624,8 @@ void CONTROL_InitStoragePointers()
 	STF_AssignPointer(9, (Int32U)CONTROL_Values_DiagRstd);
 	STF_AssignPointer(10, (Int32U)CONTROL_Values_DiagISetpointAmplitude);
 	STF_AssignPointer(11, (Int32U)&CONTROL_Values_DiagEPCounter);
+
+	STF_AssignPointer(12, (Int32U)&DataTable[REG_SET_PULSE_POWER]);
+	STF_AssignPointer(13, (Int32U)&DataTable[REG_PROBLEM]);
 }
 //-----------------------------------------------

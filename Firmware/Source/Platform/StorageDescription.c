@@ -18,7 +18,10 @@ RecordDescription StorageDescription[] =
 	{"Pulse Prsm",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Rstd",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Iset",			DT_Int16U, 	PULSES_MAX},
-	{"Pulse Counter",		DT_Int16U, 	1}
+	{"Pulse Counter",		DT_Int16U, 	1},
+
+	{"REG_SET_PULSE_POWER",	DT_Int16U, 	1},
+	{"REG_PROBLEM",			DT_Int16U, 	1}
 };
 Int32U TablePointers[sizeof(StorageDescription) / sizeof(StorageDescription[0])] = {0};
 const Int16U StorageSize = sizeof(StorageDescription) / sizeof(StorageDescription[0]);
