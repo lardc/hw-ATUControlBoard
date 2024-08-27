@@ -30,6 +30,12 @@
 //
 #define ACT_BOOT_LOADER_REQUEST					320		// Перезапуск процессора с целью перепрограммирования
 
+#define ACT_FLASH_DIAG_READ_SYMBOL				330		// Выполнить чтение символа из памяти отладочной информации
+#define ACT_FLASH_DIAG_INIT_READ				331		// Инициализировать начало считывания отладочной информации
+
+#define ACT_FLASH_DIAG_SAVE						332		// Сохранение блока отладочной информации во флэш
+#define ACT_FLASH_DIAG_ERASE					333		// Стирание области отладочной информации
+
 // REGISTERS
 //
 #define REG_I_TO_DAC_OFFSET						0		// Пересчёт уставки по току в значения ЦАП смещение (в тиках)
@@ -105,9 +111,11 @@
 
 #define REG_FWINFO_SLAVE_NID					256		// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID					257		// Device CAN master node ID (if presented)
-// 258 - 259
+
 #define REG_FWINFO_STR_LEN						260		// Length of the information string record
 #define REG_FWINFO_STR_BEGIN					261		// Begining of the information string record
+
+#define REG_MEM_SYMBOL							299		// Считанный по адресу памяти символ
 
 // ENDPOINTS
 //

@@ -13,6 +13,7 @@
 #include "Constraints.h"
 #include "ZwNCAN.h"
 #include "ZwSCI.h"
+#include "SaveToFlash.h"
 
 // Types
 //
@@ -159,6 +160,7 @@ static Boolean DEVPROFILE_Validate16(Int16U Address, Int16U Data)
 
 static Boolean DEVPROFILE_DispatchAction(Int16U ActionID, pInt16U UserError)
 {
+	static Int32U MemoryPointer = 0;
 	switch(ActionID)
 	{
 		case ACT_SAVE_TO_ROM:
@@ -185,9 +187,20 @@ static Boolean DEVPROFILE_DispatchAction(Int16U ActionID, pInt16U UserError)
 					DT_ResetNVPart(&DEVPROFILE_FillNVPartDefault);
 			}
 			break;
+
 		case ACT_BOOT_LOADER_REQUEST:
 			BOOT_LOADER_VARIABLE = BOOT_LOADER_REQUEST;
 			break;
+
+		case ACT_FLASH_DIAG_READ_SYMBOL:
+			DataTable[REG_MEM_SYMBOL] = NFLASH_ReadWord16(MemoryPointer);
+			MemoryPointer += 2;
+			break;
+
+		case ACT_FLASH_DIAG_INIT_READ:
+			MemoryPointer = FLASH_DIAG_START_ADDR;
+			break;
+
 		default:
 			return (ControllerDispatchFunction) ? ControllerDispatchFunction(ActionID, UserError) : FALSE;
 	}
