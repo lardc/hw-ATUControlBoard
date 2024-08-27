@@ -39,10 +39,8 @@ volatile Int16U CONTROL_Values_DiagVrsm[PULSES_MAX];
 volatile Int16U CONTROL_Values_DiagIrsm[PULSES_MAX];
 volatile Int16U CONTROL_Values_DiagPrsm[PULSES_MAX];
 volatile Int16U CONTROL_Values_DiagRstd[PULSES_MAX];
-volatile Int16U CONTROL_Values_DiagEPCounter = 0;
-//
 volatile Int16U CONTROL_Values_DiagISetpointAmplitude[PULSES_MAX];
-volatile Int16U CONTROL_Values_DiagISetCounter = 0;
+volatile Int16U CONTROL_Values_DiagEPCounter = 0;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
 volatile Int64U CONTROL_TimeCounterDelay = 0;
@@ -60,7 +58,7 @@ void CONTROL_ResetToDefaults(bool StopPowerSupply);
 void CONTROL_Idle();
 void CONTROL_WatchDogUpdate();
 void CONTROL_RegistersReset();
-void CONTROL_SaveResultToEndpoints(ProcessResult Result);
+void CONTROL_SaveResultToEndpoints(ProcessResult Result, float CurrentSepoint);
 void CONTROL_SaveResultToRegisters(ProcessResult Result);
 uint16_t CONTROL_HandleProblemCondition(ProcessResult Result);
 void CONTROL_InitDemagnetization();
@@ -81,7 +79,7 @@ void CONTROL_Init()
 			(pInt16U)&CONTROL_Values_SetCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
 			(pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
 			(pInt16U)&CONTROL_Values_DiagEPCounter, (pInt16U)&CONTROL_Values_DiagEPCounter,
-			(pInt16U)&CONTROL_Values_DiagISetCounter};
+			(pInt16U)&CONTROL_Values_DiagEPCounter};
 
 	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_Values_DUTVoltage, (pInt16U)CONTROL_Values_DUTCurrent,
 			(pInt16U)CONTROL_Values_Setpoint, (pInt16U)CONTROL_Values_DiagVbr, (pInt16U)CONTROL_Values_DiagVrsm,
@@ -347,22 +345,15 @@ void CONTROL_HandleBatteryCharge()
 }
 //-----------------------------------------------
 
-void CONTROL_SaveResultToEndpoints(ProcessResult Result)
+void CONTROL_SaveResultToEndpoints(ProcessResult Result, float CurrentSepoint)
 {
 	CONTROL_Values_DiagVbr[CONTROL_Values_DiagEPCounter]  = (uint16_t)Result.Vbr;
 	CONTROL_Values_DiagVrsm[CONTROL_Values_DiagEPCounter] = (uint16_t)Result.Vrsm;
 	CONTROL_Values_DiagIrsm[CONTROL_Values_DiagEPCounter] = (uint16_t)Result.Irsm;
 	CONTROL_Values_DiagPrsm[CONTROL_Values_DiagEPCounter] = (uint16_t)(Result.Prsm / 10);
 	CONTROL_Values_DiagRstd[CONTROL_Values_DiagEPCounter] = (uint16_t)(Result.Rstd * 100);
+	CONTROL_Values_DiagISetpointAmplitude[CONTROL_Values_DiagEPCounter] = (uint16_t)CurrentSepoint;
 	CONTROL_Values_DiagEPCounter++;
-}
-//-----------------------------------------------
-
-void CONTROL_SaveISetpointAmplitudeToEndpoint(float Setpoint)
-{
-	CONTROL_Values_DiagISetpointAmplitude[CONTROL_Values_DiagISetCounter] = (uint16_t)Setpoint;
-	if(CONTROL_Values_DiagISetCounter++ >= PULSES_MAX)
-		CONTROL_Values_DiagISetCounter = 0;
 }
 //-----------------------------------------------
 
@@ -454,7 +445,7 @@ void CONTROL_HandlePulse()
 				// Обработка результатов
 				LOGIC_PulseFinished();
 				Result = LOGIC_ProcessOutputData();
-				CONTROL_SaveResultToEndpoints(Result);
+				CONTROL_SaveResultToEndpoints(Result, LOGIC_SavedCurrentSetpoint());
 
 				// Проверка условий остановки
 				uint16_t Problem = CONTROL_HandleProblemCondition(Result);

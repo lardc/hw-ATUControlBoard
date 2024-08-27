@@ -1,15 +1,9 @@
-﻿// -----------------------------------------
-// Logic controller
-// ----------------------------------------
-
-#ifndef __CONTROLLER_H
+﻿#ifndef __CONTROLLER_H
 #define __CONTROLLER_H
-
 
 // Includes
 //
 #include "stdinc.h"
-
 
 //Types
 //
@@ -33,7 +27,6 @@ typedef enum __DeviceState
 	DS_InProcess		= 5
 } DeviceState;
 
-
 // Variables
 //
 extern volatile Int64U CONTROL_TimeCounter;
@@ -44,12 +37,9 @@ extern volatile Int16U CONTROL_Values_DUTCurrent[];
 extern volatile Int16U CONTROL_Values_SetCounter;
 extern volatile Int16U CONTROL_Values_ADCCounter;
 
-
 // Functions
 //
 void CONTROL_SetDeviceState(DeviceState NewState);
 void Delay_mS(uint32_t Delay);
-void CONTROL_SaveISetpointAmplitudeToEndpoint(float Setpoint);
-
 
 #endif // __CONTROLLER_H

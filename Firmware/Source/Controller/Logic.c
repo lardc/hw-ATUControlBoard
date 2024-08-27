@@ -38,6 +38,7 @@ float TimePulseWidth = 0;
 volatile HighSpeedState HS_State = HSS_None;
 //
 static uint16_t CounterPreCurrent = 0;
+static float SavedCurrentSetpoint = 0;
 
 // Forward functions
 //
@@ -85,7 +86,7 @@ void LOGIC_StartBatteryCharge()
 // Подготовка к формированию импульса
 void LOGIC_PrepareForPulse(float PulseCurrent)
 {
-	CONTROL_SaveISetpointAmplitudeToEndpoint(PulseCurrent);
+	SavedCurrentSetpoint = PulseCurrent;
 
 	LOGIC_ClearDataArrays();
 	LOGIC_GeneratePulseForm(PulseCurrent);
@@ -365,5 +366,11 @@ void LOGIC_DiagPulseDAC()
 	LL_PowerSupplyStop(FALSE);
 	LL_ExternalLED(FALSE);
 	LL_Contactor(FALSE);
+}
+//-----------------------------------------
+
+float LOGIC_SavedCurrentSetpoint()
+{
+	return SavedCurrentSetpoint;
 }
 //-----------------------------------------
