@@ -532,6 +532,9 @@ void CONTROL_HandlePulse()
 					{
 						DataTable[REG_PROBLEM] = Problem;
 						DataTable[REG_FINISHED] = OPRESULT_FAIL;
+
+						if(DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem))
+							STF_SaveDiagData();
 					}
 				}
 			}

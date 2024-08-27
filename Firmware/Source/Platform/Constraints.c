@@ -41,7 +41,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] =
 	{PULSE_TIME_MIN, PULSE_TIME_MAX, PULSE_TIME_DEF},	// 26
 	{0, 10000, 0},									// 27
 	{0, 0, 0},										// 28
-	{0, 0, 0},										// 29
+	{0, INT16U_MAX, 0},								// 29
 	{NO, YES, NO},									// 30
 	{NO, YES, NO},									// 31
 	{0, REDEF_RSTD_MAX, 0},							// 32
