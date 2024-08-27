@@ -452,7 +452,7 @@ void CONTROL_HandlePulse()
 				DataTable[REG_COUNTER_MEASURE] = PULSES_MAX - CONTROL_PulsesRemain;
 
 				// Пропуск регулирования для первого или одиночного импульса
-				if(CONTROL_PulsesRemain == 0 || CONTROL_PulsesRemain == PULSES_MAX - 1)
+				if((!CONTROL_PowerRegulator && CONTROL_PulsesRemain == 0) || CONTROL_PulsesRemain == PULSES_MAX - 1)
 					SkipRegulation = true;
 
 				// Обработка результатов
@@ -460,8 +460,10 @@ void CONTROL_HandlePulse()
 				Result = LOGIC_ProcessOutputData();
 				CONTROL_SaveResultToEndpoints(Result, LOGIC_SavedCurrentSetpoint());
 
-				// Проверка условий остановки
-				uint16_t Problem = CONTROL_HandleProblemCondition(Result);
+				// Проверка условий остановки в режиме регулирования мощности
+				uint16_t Problem = PROBLEM_NONE;
+				if(CONTROL_PowerRegulator)
+					Problem = CONTROL_HandleProblemCondition(Result);
 
 				// Ошибка по мощности
 				float Perror = PowerTarget - Result.Prsm;
