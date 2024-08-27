@@ -18,6 +18,7 @@
 #include "Measurement.h"
 #include "math.h"
 #include "BCCIxParams.h"
+#include "SaveToFlash.h"
 
 // Types
 //
@@ -62,6 +63,7 @@ void CONTROL_SaveResultToEndpoints(ProcessResult Result, float CurrentSepoint);
 void CONTROL_SaveResultToRegisters(ProcessResult Result);
 uint16_t CONTROL_HandleProblemCondition(ProcessResult Result);
 void CONTROL_InitDemagnetization();
+void CONTROL_InitStoragePointers();
 
 // Functions
 //
@@ -100,6 +102,9 @@ void CONTROL_Init()
 	// Сброс значений
 	DEVPROFILE_ResetControlSection();
 	CONTROL_ResetToDefaults(TRUE);
+
+	// Инициализация указателей на сохраняемые данные
+	CONTROL_InitStoragePointers();
 }
 //------------------------------------------------------------------------------
 
@@ -288,6 +293,14 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 		// Обратная совместимость
 		case 72:
+			break;
+
+		case ACT_FLASH_DIAG_SAVE:
+			STF_SaveDiagData();
+			break;
+
+		case ACT_FLASH_DIAG_ERASE:
+			STF_EraseDataSector();
 			break;
 
 		default:
@@ -585,5 +598,24 @@ void CONTROL_WatchDogUpdate()
 {
 	if(BOOT_LOADER_VARIABLE != BOOT_LOADER_REQUEST)
 		IWDG_Refresh();
+}
+//-----------------------------------------------
+
+void CONTROL_InitStoragePointers()
+{
+	STF_AssignPointer(0, (Int32U)CONTROL_Values_DUTVoltage);
+	STF_AssignPointer(1, (Int32U)CONTROL_Values_DUTCurrent);
+	STF_AssignPointer(2, (Int32U)&CONTROL_Values_ADCCounter);
+
+	STF_AssignPointer(3, (Int32U)CONTROL_Values_Setpoint);
+	STF_AssignPointer(4, (Int32U)&CONTROL_Values_SetCounter);
+
+	STF_AssignPointer(5, (Int32U)CONTROL_Values_DiagVbr);
+	STF_AssignPointer(6, (Int32U)CONTROL_Values_DiagVrsm);
+	STF_AssignPointer(7, (Int32U)CONTROL_Values_DiagIrsm);
+	STF_AssignPointer(8, (Int32U)CONTROL_Values_DiagPrsm);
+	STF_AssignPointer(9, (Int32U)CONTROL_Values_DiagRstd);
+	STF_AssignPointer(10, (Int32U)CONTROL_Values_DiagISetpointAmplitude);
+	STF_AssignPointer(11, (Int32U)&CONTROL_Values_DiagEPCounter);
 }
 //-----------------------------------------------

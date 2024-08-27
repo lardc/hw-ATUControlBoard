@@ -5,10 +5,12 @@
 // Variables
 RecordDescription StorageDescription[] =
 {
-	{"Instant Voltage",		DT_Int16U,	VALUES_x_SIZE},
-	{"Instant Current",		DT_Int16U, 	VALUES_x_SIZE},
-	{"Instant Setpoint",	DT_Int16U, 	VALUES_x_SIZE},
-	{"Instant Counter",		DT_Int16U, 	1},
+	{"DUT Voltage",			DT_Int16U,	VALUES_x_SIZE},
+	{"DUT Current",			DT_Int16U, 	VALUES_x_SIZE},
+	{"DUT Counter",			DT_Int16U, 	1},
+
+	{"Setpoint",			DT_Int16U, 	VALUES_x_SIZE},
+	{"Setpoint Counter",	DT_Int16U, 	1},
 
 	{"Pulse Vbr",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Vrsm",			DT_Int16U, 	PULSES_MAX},
