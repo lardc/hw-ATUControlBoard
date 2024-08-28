@@ -514,6 +514,16 @@ void CONTROL_HandlePulse()
 						Isetpoint = Result.Irsm * sqrtf(PowerTarget / Result.Prsm) + PowerRegulatorErrKi;
 					else
 						Isetpoint = Result.Irsm * PowerTarget / Result.Prsm + PowerRegulatorErrKi;
+
+					// Проверка на превышение допустимого тока
+					float MaxAllowedCurrent = LOGIC_GetMaxAllowedCurrent();
+					if(Isetpoint > MaxAllowedCurrent)
+					{
+						Isetpoint = MaxAllowedCurrent;
+						// Если уже было превышение по току — оставляем один импульс
+						if(LOGIC_SavedCurrentSetpoint() == MaxAllowedCurrent && CONTROL_PulsesRemain > 1)
+							CONTROL_PulsesRemain = 1;
+					}
 					LOGIC_PrepareForPulse(Isetpoint);
 				}
 				// Условие остановки
@@ -538,8 +548,9 @@ void CONTROL_HandlePulse()
 						// Сохранение отладочной информации
 						if(DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem))
 						{
-							IWDG_Refresh();
+							IWDG_ConfigureSlowUpdate();
 							STF_SaveDiagData();
+							IWDG_ConfigureFastUpdate();
 						}
 					}
 				}

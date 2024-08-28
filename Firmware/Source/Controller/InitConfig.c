@@ -220,7 +220,7 @@ void DMA_Config()
 void WatchDog_Config()
 {
 	IWDG_Config();
-	IWDG_ConfigureSlowUpdate();
+	IWDG_ConfigureFastUpdate();
 }
 //------------------------------------------------------------------------------
 

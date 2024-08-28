@@ -52,5 +52,6 @@ void LOGIC_GeneratePulseForm(float PulseCurrent);
 ProcessResult LOGIC_ProcessOutputData();
 void LOGIC_DiagPulseDAC();
 float LOGIC_SavedCurrentSetpoint();
+float LOGIC_GetMaxAllowedCurrent();
 
 #endif //__LOGIC_H
