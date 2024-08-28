@@ -538,8 +538,9 @@ void CONTROL_HandlePulse()
 						// Сохранение отладочной информации
 						if(DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem))
 						{
-							IWDG_Refresh();
+							IWDG_ConfigureSlowUpdate();
 							STF_SaveDiagData();
+							IWDG_ConfigureFastUpdate();
 						}
 					}
 				}
