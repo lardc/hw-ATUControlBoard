@@ -546,7 +546,7 @@ void CONTROL_HandlePulse()
 						DataTable[REG_FINISHED] = OPRESULT_FAIL;
 
 						// Сохранение отладочной информации
-						if(DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem))
+						if(Problem && (DataTable[REG_SAVE_TO_FLASH_MASK] & (1 << Problem)))
 						{
 							IWDG_ConfigureSlowUpdate();
 							STF_SaveDiagData();
