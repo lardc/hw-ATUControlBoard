@@ -377,6 +377,6 @@ float LOGIC_SavedCurrentSetpoint()
 
 float LOGIC_GetMaxAllowedCurrent()
 {
-	return DataTable[REG_REDEFINE_MAX_CURRENT] ? (DataTable[REG_REDEFINE_MAX_CURRENT] * 50) : PULSE_CURRENT_MAX;
+	return DataTable[REG_REDEFINE_MAX_CURRENT] ? (DataTable[REG_REDEFINE_MAX_CURRENT] * 100) : PULSE_CURRENT_MAX;
 }
 //-----------------------------------------
