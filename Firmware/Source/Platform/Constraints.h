@@ -51,7 +51,7 @@
 #define PULSE_POW_DEF				1000
 //
 // in mA (not mA/2)
-#define PULSE_CURRENT_MIN			500		// reg 66
+#define PULSE_CURRENT_MIN			200		// reg 66
 #define PULSE_CURRENT_MAX			45000
 #define PULSE_CURRENT_DEF			1000
 //
