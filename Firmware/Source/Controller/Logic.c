@@ -259,8 +259,8 @@ ProcessResult LOGIC_ProcessOutputData()
 	uint16_t ResAvgCounter = 0;
 	for (i = 0; i < LOGIC_DataCounter; ++i)
 	{
-		// Среднее значение сопротивления (нули отбрасываются)
-		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
+		// Среднее значение сопротивления (нули в знаменателе отбрасываются)
+		if(i >= STD_SKIP_POINTS && LOGIC_DataArrays[i].Current > 0)
 		{
 			ResAvg += LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current;
 			++ResAvgCounter;
@@ -281,13 +281,13 @@ ProcessResult LOGIC_ProcessOutputData()
 	ResAvg /= ResAvgCounter;
 
 	// Расчёт среднеквадратичного отклонения величины сопротивления
-	for (i = 0; i < LOGIC_DataCounter; ++i)
+	for (i = STD_SKIP_POINTS; i < LOGIC_DataCounter; ++i)
 	{
 		// Нули отбрасываются
-		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
+		if(LOGIC_DataArrays[i].Current > 0)
 			ResAvgSq += powf(LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current - ResAvg, 2);
 	}
-	ResAvgSq = sqrtf(ResAvgSq / ResAvgCounter);
+	ResAvgSq = sqrtf(ResAvgSq / ResAvgCounter) / ResAvg;
 
 	// Получение напряжения лавинообразования
 	uint16_t TimeSyncShiftCounter = (uint16_t)((float)TimeSyncShift / DAC_TIME_STEP);
