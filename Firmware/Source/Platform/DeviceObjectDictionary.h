@@ -77,7 +77,7 @@
 // Регистры унификации прошивок
 #define REG_INVERT_CONTACTOR_CONTROL			30		// Использовать инверсию при управлении контактором (для ЭМ v.2.0, 2.1)
 #define REG_IGNORE_BATTERY2						31		// Игнорировать параметры заряда батареи 2 (для маломощной конфигурации)
-#define REG_REDEFINE_R_STDEV					32		// Переопределить значение для СКО сопротивления резистора х10 (от 0,1 до 10), 0 - не менять
+#define REG_REDEFINE_R_STDEV					32		// Переопределить порог отношения СКО напряжения к СКО тока х100, 0 - не менять
 #define REG_REDEFINE_IDLE_V						33		// Переопределить напряжение для ХХ (в В)
 #define REG_REDEFINE_MAX_POWER					34		// Переопределить максимальную мощность (в Вт /10)
 #define REG_REDEFINE_MAX_CURRENT				35		// Переопределить максимальный ток (в А х10)
@@ -129,7 +129,7 @@
 #define EP_DIAG_DUT_VRSM						5		// Значения напряжения Vrsm по пульсам (в В)
 #define EP_DIAG_DUT_IRSM						6		// Значения тока Irsm по пульсам (в мА)
 #define EP_DIAG_DUT_PRSM						7		// Значения мощности по пульсам (в Вт /10)
-#define EP_DIAG_DUT_R_STD						8		// СКО сопротивления нагрузки х100
+#define EP_DIAG_DUT_R_STD						8		// Отношение СКО напряжения к СКО тока х100
 #define EP_DIAG_I_SET							9		// Значеня амплитуды уставки тока (в мА)
 
 // FAULT & DISABLE
@@ -157,6 +157,7 @@
 #define PROBLEM_BREAK							4		// Пробой прибора
 #define PROBLEM_FACET_BREAK						5		// Пробой по фаске
 #define PROBLEM_FOLLOWING_ERROR					6		// Ошибка регулирования мощности
+#define PROBLEM_LOAD_TYPE						7		// Недостаточно данных для определения типа нагрузки
 
 // User Errors
 // 

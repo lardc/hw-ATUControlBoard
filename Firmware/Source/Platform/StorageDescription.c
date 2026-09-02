@@ -16,7 +16,7 @@ RecordDescription StorageDescription[] =
 	{"Pulse Vrsm",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Irsm",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Prsm",			DT_Int16U, 	PULSES_MAX},
-	{"Pulse Rstd",			DT_Int16U, 	PULSES_MAX},
+	{"Pulse CvRatio",		DT_Int16U, 	PULSES_MAX},
 	{"Pulse Iset",			DT_Int16U, 	PULSES_MAX},
 	{"Pulse Counter",		DT_Int16U, 	1},
 

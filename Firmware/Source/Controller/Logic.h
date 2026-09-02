@@ -28,6 +28,7 @@ typedef struct __ProcessResult
 	float Vmax;
 	float Rstd;
 	bool LoadR;
+	uint16_t Problem;
 } ProcessResult, *pProcessResult;
 
 // Variables
