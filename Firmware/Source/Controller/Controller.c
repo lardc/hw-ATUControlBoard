@@ -460,10 +460,12 @@ void CONTROL_HandlePulse()
 				Result = LOGIC_ProcessOutputData();
 				CONTROL_SaveResultToEndpoints(Result, LOGIC_SavedCurrentSetpoint());
 
-				// Проверка условий остановки в режиме регулирования мощности
+				// Проверка условий остановки: сначала ХХ/КЗ, затем сбой определения типа нагрузки
 				uint16_t Problem = PROBLEM_NONE;
 				if(CONTROL_PowerRegulator)
 					Problem = CONTROL_HandleProblemCondition(Result);
+				if(Problem == PROBLEM_NONE)
+					Problem = Result.Problem;
 
 				// Ошибка по мощности
 				float Perror = PowerTarget - Result.Prsm;

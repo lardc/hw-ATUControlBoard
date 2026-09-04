@@ -239,9 +239,11 @@ void LOGIC_GeneratePulseForm(float PulseCurrent)
 ProcessResult LOGIC_ProcessOutputData()
 {
 	uint16_t i;
-	float ResAvg = 0, ResAvgSq = 0;
-	float Max_dVdt = 0, Vmax = 0;
+	float Max_dVdt = 0, Vmax = 0, Imax = 0;
 	float Vbr = 0, Vrsm = 0, Irsm = 0, Prsm = 0;
+	float CvRatio = 0;
+	bool LoadR = false;
+	uint16_t Problem = PROBLEM_NONE;
 
 	// Пересчёт значений АЦП в ток и напряжение
 	MEASURE_ConvertVoltageArr(LOGIC_DUTVoltageRaw, (float *)LOGIC_DataArrays, LOGIC_DataCounter);
@@ -256,19 +258,15 @@ ProcessResult LOGIC_ProcessOutputData()
 	CONTROL_Values_ADCCounter = LOGIC_DataCounter;
 
 	// Вспомогательные вычисления
-	uint16_t ResAvgCounter = 0;
 	for (i = 0; i < LOGIC_DataCounter; ++i)
 	{
-		// Среднее значение сопротивления (нули отбрасываются)
-		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
-		{
-			ResAvg += LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current;
-			++ResAvgCounter;
-		}
-
 		// Максимальное напряжение
 		if (LOGIC_DataArrays[i].Voltage > Vmax)
 			Vmax = LOGIC_DataArrays[i].Voltage;
+
+		// Максимальный ток
+		if (LOGIC_DataArrays[i].Current > Imax)
+			Imax = LOGIC_DataArrays[i].Current;
 
 		// Максимальная скорость нарастания напряжения
 		if (i < (LOGIC_DataCounter - 1))
@@ -278,16 +276,53 @@ ProcessResult LOGIC_ProcessOutputData()
 				Max_dVdt = tmp;
 		}
 	}
-	ResAvg /= ResAvgCounter;
 
-	// Расчёт среднеквадратичного отклонения величины сопротивления
-	for (i = 0; i < LOGIC_DataCounter; ++i)
+	// Отношение СКО напряжения к СКО тока на верхней части основного импульса
+	float Imin = LOAD_I_REL_MIN * Imax;
+	float SumV = 0, SumI = 0;
+	uint16_t CvCounter = 0;
+
+	for (i = CounterPreCurrent; i < LOGIC_DataCounter; ++i)
 	{
-		// Нули отбрасываются
-		if ((LOGIC_DataArrays[i].Current > 0) && (LOGIC_DataArrays[i].Voltage > 0))
-			ResAvgSq += powf(LOGIC_DataArrays[i].Voltage / LOGIC_DataArrays[i].Current - ResAvg, 2);
+		if (LOGIC_DataArrays[i].Current >= Imin)
+		{
+			SumV += LOGIC_DataArrays[i].Voltage;
+			SumI += LOGIC_DataArrays[i].Current;
+			++CvCounter;
+		}
 	}
-	ResAvgSq = sqrtf(ResAvgSq / ResAvgCounter);
+
+	if (CvCounter >= MEASURE_AVG && SumV > 0 && SumI > 0)
+	{
+		float MeanV = SumV / CvCounter;
+		float MeanI = SumI / CvCounter;
+		float SumVSq = 0, SumISq = 0;
+
+		for (i = CounterPreCurrent; i < LOGIC_DataCounter; ++i)
+		{
+			if (LOGIC_DataArrays[i].Current >= Imin)
+			{
+				float dV = LOGIC_DataArrays[i].Voltage - MeanV;
+				float dI = LOGIC_DataArrays[i].Current - MeanI;
+				SumVSq += dV * dV;
+				SumISq += dI * dI;
+			}
+		}
+
+		float StdI = sqrtf(SumISq / CvCounter);
+		float CvI = StdI / MeanI;
+
+		if (CvI > 0)
+		{
+			CvRatio = (sqrtf(SumVSq / CvCounter) / MeanV) / CvI;
+			float MinCvRatio = DataTable[REG_REDEFINE_R_STDEV] ? ((float)DataTable[REG_REDEFINE_R_STDEV] / 100) : LOAD_CV_RATIO;
+			LoadR = (CvRatio > MinCvRatio);
+		}
+		else
+			Problem = PROBLEM_LOAD_TYPE;
+	}
+	else
+		Problem = PROBLEM_LOAD_TYPE;
 
 	// Получение напряжения лавинообразования
 	uint16_t TimeSyncShiftCounter = (uint16_t)((float)TimeSyncShift / DAC_TIME_STEP);
@@ -317,9 +352,9 @@ ProcessResult LOGIC_ProcessOutputData()
 	ret.Prsm = Prsm;
 	ret.Max_dVdt = Max_dVdt;
 	ret.Vmax = Vmax;
-	ret.Rstd = ResAvgSq;
-	float MaxSTDev = DataTable[REG_REDEFINE_R_STDEV] ? (DataTable[REG_REDEFINE_R_STDEV] / 10) : LOAD_R_STDEV;
-	ret.LoadR = (ResAvgSq < MaxSTDev) ? true : false;
+	ret.Rstd = CvRatio;
+	ret.LoadR = LoadR;
+	ret.Problem = Problem;
 
 	return ret;
 }

@@ -12,6 +12,7 @@
 #include "Controller.h"
 #include "Constraints.h"
 #include "ZwNCAN.h"
+#include "ZwNFLASH.h"
 #include "ZwSCI.h"
 #include "SaveToFlash.h"
 

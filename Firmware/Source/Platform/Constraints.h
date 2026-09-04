@@ -64,7 +64,7 @@
 // Redefine values
 // in A x10
 #define REDEF_CURRENT_MAX			700
-#define REDEF_RSTD_MAX				100
+#define REDEF_RSTD_MAX				1000
 #define REDEF_IDLEV_MAX				10000
 #define REDEF_POWER_MAX				PULSE_POW_MAX
 
